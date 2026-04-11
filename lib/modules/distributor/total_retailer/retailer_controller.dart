@@ -1,0 +1,416 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:zlock_smart_finance/modules/distributor/dashboard/distributor_dash_controller.dart';
+import 'package:zlock_smart_finance/modules/distributor/total_retailer/retailer_model.dart';
+import 'package:zlock_smart_finance/app/services/distributor_retailers_service.dart';
+
+import 'package:zlock_smart_finance/model/distributor_retailers_response.dart';
+
+enum RetailerListType { total, active, today }
+
+// class RetailerController extends GetxController {
+//   final RetailerListType listType;
+//
+//   RetailerController({this.listType = RetailerListType.total}); // ✅ no impact
+//
+//   RxList<RetailerModel> retailerList = <RetailerModel>[].obs;
+//   RxList<RetailerModel> filteredList = <RetailerModel>[].obs;
+//
+//   final searchCtrl = TextEditingController();
+//
+//   // ✅ keep old variables (no impact)
+//   RxBool isSaving = false.obs;
+//   final debitCtrl = TextEditingController();
+//   final creditCtrl = TextEditingController();
+//   final passCtrl = TextEditingController();
+//   final confirmCtrl = TextEditingController();
+//
+//   final isLoading = false.obs;
+//   final isLoadingMore = false.obs;
+//
+//   int _page = 1;
+//   final int _limit = 10;
+//   int _total = 0;
+//
+//   bool get hasMore => retailerList.length < _total;
+//
+//   final _service = DistributorRetailersService();
+//
+//   bool get _isPaginated => listType == RetailerListType.total;
+//
+//   @override
+//   void onInit() {
+//     super.onInit();
+//     searchCtrl.addListener(_search);
+//     fetchRetailers(reset: true);
+//   }
+//
+//   Future<void> fetchRetailers({required bool reset}) async {
+//     // ✅ Active/Today are non paginated => always reset
+//     final bool doReset = reset || !_isPaginated;
+//
+//     if (doReset) {
+//       _page = 1;
+//       _total = 0;
+//       retailerList.clear();
+//       filteredList.clear();
+//       isLoading.value = true;
+//     } else {
+//       if (!hasMore) return;
+//       isLoadingMore.value = true;
+//     }
+//
+//     try {
+//       final DistributorRetailersResponse? resp =
+//       await _fetchByType(page: _page, limit: _limit);
+//
+//       if (resp == null || resp.status != 200) return;
+//
+//       // meta
+//       _total = resp.meta?.total ?? resp.data.length;
+//       if (_isPaginated) {
+//         _page = resp.meta?.page ?? _page;
+//       }
+//
+//       // ✅ IMPORTANT: Strongly typed mapping (NO dynamic)
+//       final List<RetailerModel> newItems = resp.data
+//           .map<RetailerModel>((e) => RetailerModel.fromApi(e))
+//           .toList();
+//
+//       if (doReset) {
+//         retailerList.assignAll(newItems);
+//       } else {
+//         retailerList.addAll(newItems);
+//       }
+//
+//       _search();
+//     } finally {
+//       isLoading.value = false;
+//       isLoadingMore.value = false;
+//     }
+//   }
+//
+//   // ✅ strongly typed return (NO Future<dynamic>)
+//   Future<DistributorRetailersResponse?> _fetchByType({
+//     required int page,
+//     required int limit,
+//   }) {
+//     switch (listType) {
+//       case RetailerListType.active:
+//         return _service.getActiveRetailers();
+//       case RetailerListType.today:
+//         return _service.getTodayRetailers();
+//       case RetailerListType.total:
+//       default:
+//         return _service.getRetailers(page: page, limit: limit);
+//     }
+//   }
+//
+//   Future<void> loadMore() async {
+//     if (!_isPaginated) return; // ✅ active/today no pagination
+//
+//     if (isLoading.value || isLoadingMore.value) return;
+//     if (!hasMore) return;
+//
+//     _page += 1;
+//     await fetchRetailers(reset: false);
+//   }
+//
+//   void _search() {
+//     final q = searchCtrl.text.trim().toLowerCase();
+//
+//     if (q.isEmpty) {
+//       filteredList.assignAll(retailerList); // ✅ correct
+//       return;
+//     }
+//
+//     final List<RetailerModel> results = retailerList.where((r) {
+//       return r.name.toLowerCase().contains(q) ||
+//           r.id.toLowerCase().contains(q) ||
+//           r.mobile.toLowerCase().contains(q) ||
+//           r.email.toLowerCase().contains(q) ||
+//           r.state.toLowerCase().contains(q);
+//     }).toList();
+//
+//     filteredList.assignAll(results); // ✅ correct
+//   }
+//
+//   Future<void> toggleRetailerStatus(RetailerModel retailer, bool newValue) async {
+//     if (retailer.isToggling.value) return;
+//
+//     final oldValue = retailer.isActive.value;
+//
+//     retailer.isActive.value = newValue; // optimistic
+//     retailer.isToggling.value = true;
+//
+//     try {
+//       final resp = await _service.toggleRetailerStatus(retailer.retailerId);
+//
+//       if (resp == null || resp.status != 200 || resp.data == null) {
+//         retailer.isActive.value = oldValue;
+//         Get.snackbar("Error", "Failed to update status",
+//             snackPosition: SnackPosition.BOTTOM);
+//         return;
+//       }
+//
+//       retailer.isActive.value = resp.data!;
+//     } finally {
+//       retailer.isToggling.value = false;
+//     }
+//   }
+//
+//   @override
+//   void onClose() {
+//     searchCtrl.dispose();
+//     super.onClose();
+//   }
+// }
+
+// class RetailerController extends GetxController {
+//   final RetailerListType listType;
+//
+//   RetailerController({this.listType = RetailerListType.total});
+//
+//   RxList<RetailerModel> retailerList = <RetailerModel>[].obs;
+//   RxList<RetailerModel> filteredList = <RetailerModel>[].obs;
+//
+//   final searchCtrl = TextEditingController();
+//   final isLoading = false.obs;
+//
+//   final _service = DistributorRetailersService();
+//
+//   // ✅ keep old variables (no impact)
+//   RxBool isSaving = false.obs;
+//   final debitCtrl = TextEditingController();
+//   final creditCtrl = TextEditingController();
+//   final passCtrl = TextEditingController();
+//   final confirmCtrl = TextEditingController();
+//
+//   /// ✅ DISTRIBUTOR ID (dynamic later)
+//   final distributorId = "69bbbaefba37074637663271";
+//
+//   @override
+//   void onInit() {
+//     super.onInit();
+//     searchCtrl.addListener(_search);
+//     fetchRetailers();
+//   }
+//
+//   Future<void> fetchRetailers() async {
+//     isLoading.value = true;
+//
+//     try {
+//       final list = await _service.getRetailersFromHierarchy(distributorId);
+//
+//       List<DistributorRetailerItem> filtered = list;
+//
+//       /// ✅ FILTER LOGIC
+//       if (listType == RetailerListType.active) {
+//         filtered = list.where((e) => e.status == true).toList();
+//       }
+//
+//       if (listType == RetailerListType.today) {
+//         final today = DateTime.now();
+//
+//         filtered = list.where((e) {
+//           final created = DateTime.tryParse(e.createdAt ?? "");
+//           if (created == null) return false;
+//
+//           return created.year == today.year &&
+//               created.month == today.month &&
+//               created.day == today.day;
+//         }).toList();
+//       }
+//
+//       retailerList.value = filtered
+//           .map((e) => RetailerModel.fromApi(e))
+//           .toList();
+//
+//       filteredList.assignAll(retailerList);
+//     } catch (e) {
+//       debugPrint("❌ Retailer fetch error: $e");
+//     } finally {
+//       isLoading.value = false;
+//     }
+//   }
+//
+//   void _search() {
+//     final q = searchCtrl.text.toLowerCase();
+//
+//     if (q.isEmpty) {
+//       filteredList.assignAll(retailerList);
+//       return;
+//     }
+//
+//     filteredList.assignAll(
+//       retailerList.where((r) =>
+//       r.name.toLowerCase().contains(q) ||
+//           r.mobile.contains(q) ||
+//           r.email.toLowerCase().contains(q)),
+//     );
+//   }
+//
+//   @override
+//   void onClose() {
+//     searchCtrl.dispose();
+//     super.onClose();
+//   }
+// }
+class RetailerController extends GetxController {
+  final RetailerListType listType;
+
+  RetailerController({this.listType = RetailerListType.total});
+
+  RxList<RetailerModel> retailerList = <RetailerModel>[].obs;
+  RxList<RetailerModel> filteredList = <RetailerModel>[].obs;
+
+  final searchCtrl = TextEditingController();
+
+  final isLoading = false.obs;
+  final isLoadingMore = false.obs; // ✅ restore
+
+  final _service = DistributorRetailersService();
+
+  /// ✅ keep old variables (no impact)
+  RxBool isSaving = false.obs;
+  final debitCtrl = TextEditingController();
+  final creditCtrl = TextEditingController();
+  final passCtrl = TextEditingController();
+  final confirmCtrl = TextEditingController();
+
+  final DistributorDashController distributorController = Get.find();
+  // final distributorId = "69bbbaefba37074637663271";
+
+  String get distributorId => distributorController.userId.value;
+
+  @override
+  void onInit() {
+    super.onInit();
+    searchCtrl.addListener(_search);
+    fetchRetailers();
+  }
+
+  Future<void> fetchRetailers() async {
+    print("call this api fo rget retailer list");
+    isLoading.value = true;
+
+    try {
+      final list = await _service.getRetailersFromHierarchy(distributorId);
+
+      List<DistributorRetailerItem> filtered = list;
+
+      /// ✅ ACTIVE FILTER
+      if (listType == RetailerListType.active) {
+        filtered = list.where((e) => e.status == true).toList();
+      }
+
+      /// ✅ TODAY FILTER
+      if (listType == RetailerListType.today) {
+        final today = DateTime.now();
+
+        filtered = list.where((e) {
+          final created = DateTime.tryParse(e.createdAt ?? "");
+          if (created == null) return false;
+
+          return created.year == today.year &&
+              created.month == today.month &&
+              created.day == today.day;
+        }).toList();
+      }
+
+      retailerList.assignAll(
+        filtered.map((e) => RetailerModel.fromApi(e)).toList(),
+      );
+
+      _search();
+    } catch (e) {
+      debugPrint("❌ Retailer fetch error: $e");
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  /// ✅ SEARCH (same as before)
+  void _search() {
+    final q = searchCtrl.text.trim().toLowerCase();
+
+    if (q.isEmpty) {
+      filteredList.assignAll(retailerList);
+      return;
+    }
+
+    filteredList.assignAll(
+      retailerList.where((r) =>
+      r.name.toLowerCase().contains(q) ||
+          r.id.toLowerCase().contains(q) ||
+          r.mobile.contains(q) ||
+          r.email.toLowerCase().contains(q) ||
+          r.state.toLowerCase().contains(q)),
+    );
+  }
+
+  /// ✅ RESTORED TOGGLE (IMPORTANT 🔥)
+  // Future<void> toggleRetailerStatus(RetailerModel retailer, bool newValue) async {
+  //   if (retailer.isToggling.value) return;
+  //
+  //   final oldValue = retailer.isActive.value;
+  //
+  //   retailer.isActive.value = newValue;
+  //   retailer.isToggling.value = true;
+  //
+  //   try {
+  //     final resp = await _service.toggleRetailerStatus(retailer.retailerId);
+  //
+  //     if (resp == null || resp.status != 200 || resp.data == null) {
+  //       retailer.isActive.value = oldValue;
+  //
+  //       Get.snackbar("Error", "Failed to update status",
+  //           snackPosition: SnackPosition.BOTTOM);
+  //       return;
+  //     }
+  //
+  //     retailer.isActive.value = resp.data!;
+  //   } finally {
+  //     retailer.isToggling.value = false;
+  //   }
+  // }
+
+  Future<void> toggleRetailerStatus(RetailerModel retailer, bool newValue) async {
+    if (retailer.isToggling.value) return;
+
+    final oldValue = retailer.isActive.value;
+
+    // ✅ Optimistic UI
+    retailer.isActive.value = newValue;
+    retailer.isToggling.value = true;
+
+    try {
+      final resp = await _service.toggleRetailerStatus(
+        retailer.retailerId,
+        newValue,
+      );
+
+      if (resp == null || resp.success != true) {
+        retailer.isActive.value = oldValue;
+
+        Get.snackbar("Error", "Failed to update status",
+            snackPosition: SnackPosition.BOTTOM);
+        return;
+      }
+
+      // ✅ FINAL VALUE FROM API (IMPORTANT)
+      retailer.isActive.value = resp.isActive;
+
+      Get.snackbar("Success", resp.message,
+          snackPosition: SnackPosition.BOTTOM);
+
+    } finally {
+      retailer.isToggling.value = false;
+    }
+  }
+  @override
+  void onClose() {
+    searchCtrl.dispose();
+    super.onClose();
+  }
+}
