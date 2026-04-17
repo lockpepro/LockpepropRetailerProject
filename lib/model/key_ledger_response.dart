@@ -37,7 +37,7 @@ class KeySummary {
 
   factory KeySummary.fromJson(Map<String, dynamic> json) {
     return KeySummary(
-      totalAvailable: json["totalAvailable"] ?? 0,
+      totalAvailable: json["totalCredited"] ?? 0,
       totalUsed: json["totalUsed"] ?? 0,
       netBalance: json["netBalance"] ?? 0,
     );

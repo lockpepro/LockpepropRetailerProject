@@ -158,6 +158,7 @@ class DashboardData {
 class DashUser {
   String? id;
   String? name;
+  String? type;
   String? email;
   String? userType;
   String? role;
@@ -172,6 +173,7 @@ class DashUser {
   DashUser.fromJson(Map<String, dynamic> json) {
     id = json['id']?.toString();
     name = json['name']?.toString();
+    type = json['type']?.toString();
     email = json['email']?.toString();
     userType = json['userType']?.toString();
     role = json['role']?.toString();
@@ -193,6 +195,7 @@ class DashUser {
   Map<String, dynamic> toJson() => {
     "id": id,
     "name": name,
+    "type": type,
     "email": email,
     "userType": userType,
     "role": role,
@@ -358,6 +361,7 @@ class DashCustomers {
     "emi": emi?.toJson(),
   };
 }
+
 class DashCustomerSelf {
   int? total;
   int? active;
@@ -470,14 +474,57 @@ class DashAppUpdate {
 
 class DashVendorStats {
   DashVendorSummary? summary;
+  DashVendorByType? byType; // ✅ NEW
 
   DashVendorStats.fromJson(Map<String, dynamic> json) {
     summary = json['summary'] != null
         ? DashVendorSummary.fromJson(json['summary'])
         : null;
+    // ✅ SAFE PARSE (NO IMPACT)
+    byType = json['by_type'] != null
+        ? DashVendorByType.fromJson(json['by_type'])
+        : null;
   }
 }
 
+
+class DashVendorByType {
+  DashVendorType? distributor;
+  DashVendorType? subDistributor;
+  DashVendorType? vendor;
+  DashVendorType? retailer;
+
+  DashVendorByType.fromJson(Map<String, dynamic> json) {
+    distributor = json['distributor'] != null
+        ? DashVendorType.fromJson(json['distributor'])
+        : null;
+
+    subDistributor = json['sub_distributor'] != null
+        ? DashVendorType.fromJson(json['sub_distributor'])
+        : null;
+
+    vendor = json['vendor'] != null
+        ? DashVendorType.fromJson(json['vendor'])
+        : null;
+
+    retailer = json['retailer'] != null
+        ? DashVendorType.fromJson(json['retailer'])
+        : null;
+  }
+}
+class DashVendorType {
+  int? total;
+  int? active;
+  int? inactive;
+  int? deleted;
+
+  DashVendorType.fromJson(Map<String, dynamic> json) {
+    total = _toInt(json['total']);
+    active = _toInt(json['active']);
+    inactive = _toInt(json['inactive']);
+    deleted = _toInt(json['deleted']);
+  }
+}
 class DashVendorSummary {
   int? total;
   int? active;
@@ -491,6 +538,7 @@ class DashVendorSummary {
     deleted = json['deleted'];
   }
 }
+
 class DashQr {
   String? id;
   String? token;

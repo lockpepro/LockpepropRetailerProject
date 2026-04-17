@@ -354,18 +354,18 @@ class ViewRetailerPage extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: _pillButton(
-                  "-  Debit",
-                  const Color(0xFF2E3FA8),
-                      () => CreditDebitDialog.show(
-                    "Debit",
-                    rc,
-                    detailsC,
-                  ),
-                ),
-              ),
+              // const SizedBox(width: 12),
+              // Expanded(
+              //   child: _pillButton(
+              //     "-  Debit",
+              //     const Color(0xFF2E3FA8),
+              //         () => CreditDebitDialog.show(
+              //       "Debit",
+              //       rc,
+              //       detailsC,
+              //     ),
+              //   ),
+              // ),
             ],
           ),
 

@@ -871,7 +871,7 @@ class _CustomerQrDialogState extends State<CustomerQrDialog> {
       backgroundColor: Colors.white,
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
+          padding: const EdgeInsets.fromLTRB(0, 20, 0, 24),
           child: Obx(() {
             final loading = ctrl.isLoading.value;
             final Uint8List? bytes = ctrl.qrBytes.value;
@@ -894,27 +894,31 @@ class _CustomerQrDialogState extends State<CustomerQrDialog> {
                         style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
                       ),
                       const Spacer(),
-                      GestureDetector(
-                        onTap: () => Get.back(),
-                        child: const Icon(Icons.close),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: GestureDetector(
+                          onTap: () => Get.back(),
+                          child: const Icon(Icons.close),
+                        ),
                       )
                     ],
                   ),
 
-                  const SizedBox(height: 228),
+                  const SizedBox(height: 150),
 
                   /// QR BOX
                   Align(
                     alignment: Alignment.center,
                     child: Container(
-                      padding: const EdgeInsets.all(18),
+                      margin: EdgeInsets.all(4),
+                      // padding: const EdgeInsets.all(5),
                       decoration: BoxDecoration(
                         color: const Color(0xffEEF1FF),
                         borderRadius: BorderRadius.circular(22),
                       ),
                       child: SizedBox(
-                        height: 220,
-                        width: 220,
+                        // height: 500,
+                        // width: 400,
                         child: loading
                             ? const Center(child: CircularProgressIndicator())
                             : (url.isNotEmpty
@@ -922,7 +926,7 @@ class _CustomerQrDialogState extends State<CustomerQrDialog> {
                           borderRadius: BorderRadius.circular(12),
                           child: Image.network(
                             url,
-                            fit: BoxFit.contain,
+                            fit: BoxFit.fill,
                             errorBuilder: (_, __, ___) => Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -993,11 +997,10 @@ class _CustomerQrDialogState extends State<CustomerQrDialog> {
 
                   const SizedBox(height: 16),
 
-                  if (ctrl.expiresIn.value.isNotEmpty)
-                    Text(
-                      "Expires in: ${ctrl.expiresIn.value}",
-                      style: TextStyle(color: Colors.grey.shade600, fontSize: 12),
-                    ),
+                  // if (ctrl.expiresIn.value.isNotEmpty)
+                  //   Text("Expires in: ${ctrl.expiresIn.value}",
+                  //     style: TextStyle(color: Colors.grey.shade600, fontSize: 12),
+                  //   ),
                 ],
               ),
             );

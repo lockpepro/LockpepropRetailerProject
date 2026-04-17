@@ -867,6 +867,7 @@ extension _DocType on String {
   bool get isDoc => ext == "doc" || ext == "docx";
   bool get isImage => ["png", "jpg", "jpeg", "webp"].contains(ext);
 }
+
 enum EmiStatus { paid, unpaid }
 
 extension EmiStatusX on EmiStatus {

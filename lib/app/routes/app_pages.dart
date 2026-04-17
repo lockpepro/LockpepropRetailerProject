@@ -39,6 +39,10 @@ class AppPages {
       page: () => DistributorDashboard(),
     ),
     GetPage(
+      name: AppRoutes.DASH_SUB_DISTRIBUTOR,
+      page: () => DistributorDashboard(),
+    ),
+    GetPage(
       name: AppRoutes.RETAIL_ACCOUNT_PAGE,
       page: () => RetailAccountPage(),
       binding: AccountBinding(),

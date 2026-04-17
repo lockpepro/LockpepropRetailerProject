@@ -27,7 +27,7 @@ class KeyTransactionsPage extends StatelessWidget {
             decoration: const BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  AppColors.topBgColour,
+                  // AppColors.topBgColour,
                   Colors.white,
                   Colors.white,
                   Colors.white
@@ -174,7 +174,8 @@ class KeyTransactionsPage extends StatelessWidget {
         activeColor: const Color(0xff2E7D32),
       ),
       _platformTab(
-        title: 'iPhone Key',
+        title: 'Iphone Key',
+        // title: 'Used Key',
         count: 0,
         index: 1,
         icon: Icons.apple,
@@ -313,45 +314,112 @@ class KeyTransactionsPage extends StatelessWidget {
   }
 
   // ---------------- SUMMARY ----------------
+  // Widget _summaryCards() {
+  //   return Row(
+  //     children: [
+  //       _summaryItem('Total Key', ctrl.totalKey.value),//isko bhi total
+  //       _summaryItem('Used Key', ctrl.usedKey.value),//isko clicable bana he  only usde key
+  //       _summaryItem('Balance Key', ctrl.balanceKey.value),
+  //     ],
+  //   );
+  // }
+
   Widget _summaryCards() {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        _summaryItem('Total Key', ctrl.totalKey.value),
-        _summaryItem('Used Key', ctrl.usedKey.value),
-        _summaryItem('Balance Key', ctrl.balanceKey.value),
+        _summaryItem(
+          'Total Key',
+          ctrl.totalKey.value,
+          onTap: () {
+            ctrl.filterType.value = "all"; // ✅ ALL
+            print("tabbed all >>>>>>>${ctrl.filterType.value}");
+
+          },
+        ),
+        _summaryItem(
+          'Used Key',
+          ctrl.usedKey.value,
+          onTap: () {
+            ctrl.filterType.value = "used"; // ✅ USED ONLY
+            print("tabbed used >>>>>>>${ctrl.filterType.value}");
+
+          },
+        ),
+        _summaryItem(
+          'Balance Key',
+          ctrl.balanceKey.value,
+          onTap: () {
+            ctrl.filterType.value = "all"; // optional (no change)
+          },
+        ),
       ],
     );
   }
+  // Widget _summaryItem(String title, int value,{VoidCallback? onTap}) {
+  //   return GestureDetector(
+  //     onTap: onTap,
+  //     child: Expanded(
+  //       child: Container(
+  //         margin: const EdgeInsets.symmetric(horizontal: 6),
+  //         padding: const EdgeInsets.all(14),
+  //         decoration: BoxDecoration(
+  //           borderRadius: BorderRadius.circular(14),
+  //           border: Border.all(color: const Color(0xffD6DCFF)),
+  //         ),
+  //         child: Column(
+  //           crossAxisAlignment: CrossAxisAlignment.start,
+  //           children: [
+  //             Text(title,
+  //                 style: const TextStyle(
+  //                     fontSize: 12, color: Color(0xff3F51B5))),
+  //             const SizedBox(height: 8),
+  //             Text(
+  //               value.toString(),
+  //               style: const TextStyle(
+  //                 fontSize: 18,
+  //                 fontWeight: FontWeight.w700,
+  //               ),
+  //             ),
+  //           ],
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 
-  Widget _summaryItem(String title, int value) {
-    return Expanded(
-      child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 6),
-        padding: const EdgeInsets.all(14),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: const Color(0xffD6DCFF)),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(title,
+  Widget _summaryItem(String title, int value, {VoidCallback? onTap}) {
+    return Expanded( // ✅ YAHAN HOGA
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          margin: const EdgeInsets.symmetric(horizontal: 6),
+          padding: const EdgeInsets.all(14),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(color: const Color(0xffD6DCFF)),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(title,
+                  style: const TextStyle(
+                      fontSize: 12, color: Color(0xff3F51B5))),
+              const SizedBox(height: 8),
+              Text(
+                value.toString(),
                 style: const TextStyle(
-                    fontSize: 12, color: Color(0xff3F51B5))),
-            const SizedBox(height: 8),
-            Text(
-              value.toString(),
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w700,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
   }
-
   // ---------------- TRANSACTION LIST ----------------
   // Widget _transactionList() {
   //   return ListView.builder(
@@ -377,15 +445,49 @@ class KeyTransactionsPage extends StatelessWidget {
   //     },
   //   ));
   // }
+  // Widget _transactionList() {
+  //   return Obx(() {
+  //     // 👉 iPhone selected
+  //     if (ctrl.selectedKey.value == KeyType.iphone) {
+  //       return _comingSoonWidget();
+  //     }
+  //
+  //     // 👉 Android data
+  //     if (ctrl.transactions.isEmpty && !ctrl.isLoading.value) {
+  //       return const Padding(
+  //         padding: EdgeInsets.only(top: 40),
+  //         child: Center(child: Text("No Transactions Found")),
+  //       );
+  //     }
+  //     final list = ctrl.filteredTransactions;
+  //
+  //
+  //     return ListView.builder(
+  //       shrinkWrap: true,
+  //       physics: const NeverScrollableScrollPhysics(),
+  //       // itemCount: ctrl.transactions.length,
+  //       itemCount: list.length,
+  //
+  //       itemBuilder: (_, i) {
+  //         // final t = ctrl.transactions[i];
+  //         final t = list[i];
+  //
+  //         return _transactionCard(t);
+  //       },
+  //     );
+  //   });
+  // }
+
   Widget _transactionList() {
     return Obx(() {
+      final list = ctrl.filteredTransactions;
+
       // 👉 iPhone selected
       if (ctrl.selectedKey.value == KeyType.iphone) {
         return _comingSoonWidget();
       }
 
-      // 👉 Android data
-      if (ctrl.transactions.isEmpty && !ctrl.isLoading.value) {
+      if (list.isEmpty && !ctrl.isLoading.value) {
         return const Padding(
           padding: EdgeInsets.only(top: 40),
           child: Center(child: Text("No Transactions Found")),
@@ -395,14 +497,15 @@ class KeyTransactionsPage extends StatelessWidget {
       return ListView.builder(
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
-        itemCount: ctrl.transactions.length,
+        itemCount: list.length,
         itemBuilder: (_, i) {
-          final t = ctrl.transactions[i];
+          final t = list[i];
           return _transactionCard(t);
         },
       );
     });
   }
+
   Widget _comingSoonWidget() {
     return Padding(
       padding: const EdgeInsets.only(top: 60),
@@ -428,6 +531,7 @@ class KeyTransactionsPage extends StatelessWidget {
       ),
     );
   }
+
   Widget _transactionCard(TransactionModel t) {
     final color = t.isCredit ? const Color(0xff3BAF6B) : const Color(0xffC0392B);
 

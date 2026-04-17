@@ -203,8 +203,8 @@ class TotalRetailerListPage extends StatelessWidget {
                 }),
                 const SizedBox(width: 10),
                 Text(
-                  title,
-                  style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+                  title,maxLines:  1 ,
+                  style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
                 ),
                 const Spacer(),
                 ElevatedButton.icon(
@@ -214,8 +214,8 @@ class TotalRetailerListPage extends StatelessWidget {
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
                     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                   ),
-                  icon: const Icon(Icons.add, size: 18, color: Colors.white),
-                  label: const Text("Add New Retailers", style: TextStyle(color: Colors.white)),
+                  icon: const Icon(Icons.add, size: 15, color: Colors.white),
+                  label: const Text("Add Retailers", style: TextStyle(color: Colors.white)),
                 ),
               ],
             ),

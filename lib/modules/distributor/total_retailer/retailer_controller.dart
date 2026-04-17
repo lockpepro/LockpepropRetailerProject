@@ -287,40 +287,114 @@ class RetailerController extends GetxController {
   void onInit() {
     super.onInit();
     searchCtrl.addListener(_search);
+    debugPrint("🆔 DISTRIBUTOR ID:INIT- $distributorId");
+
     fetchRetailers();
   }
 
+  // Future<void> fetchRetailers() async {
+  //   print("call this api fo rget retailer list");
+  //   isLoading.value = true;
+  //   debugPrint("🆔 DISTRIBUTOR ID: $distributorId");
+  //
+  //   try {
+  //     final list = await _service.getRetailersFromHierarchy(distributorId);
+  //
+  //     List<DistributorRetailerItem> filtered = list;
+  //
+  //     /// ✅ ACTIVE FILTER
+  //     if (listType == RetailerListType.active) {
+  //       filtered = list.where((e) => e.status == true).toList();
+  //     }
+  //
+  //     /// ✅ TODAY FILTER
+  //     if (listType == RetailerListType.today) {
+  //       final today = DateTime.now();
+  //
+  //       filtered = list.where((e) {
+  //         final created = DateTime.tryParse(e.createdAt ?? "");
+  //         if (created == null) return false;
+  //
+  //         return created.year == today.year &&
+  //             created.month == today.month &&
+  //             created.day == today.day;
+  //       }).toList();
+  //     }
+  //
+  //     retailerList.assignAll(
+  //       filtered.map((e) => RetailerModel.fromApi(e)).toList(),
+  //     );
+  //
+  //     _search();
+  //   } catch (e) {
+  //     debugPrint("❌ Retailer fetch error: $e");
+  //   } finally {
+  //     isLoading.value = false;
+  //   }
+  // }
+
   Future<void> fetchRetailers() async {
-    print("call this api fo rget retailer list");
+    print("📡 API CALL: get retailer list");
     isLoading.value = true;
+
+    debugPrint("🆔 DISTRIBUTOR ID: $distributorId");
 
     try {
       final list = await _service.getRetailersFromHierarchy(distributorId);
+
+      debugPrint("📊 TOTAL LIST FROM API: ${list.length}");
 
       List<DistributorRetailerItem> filtered = list;
 
       /// ✅ ACTIVE FILTER
       if (listType == RetailerListType.active) {
-        filtered = list.where((e) => e.status == true).toList();
+        filtered = list.where((e) {
+          debugPrint("🔎 ACTIVE CHECK => ${e.retailerName} | status: ${e.status}");
+          return e.status == true;
+        }).toList();
+
+        debugPrint("✅ ACTIVE FILTER COUNT: ${filtered.length}");
       }
 
-      /// ✅ TODAY FILTER
+      /// ✅ TODAY FILTER (FIXED 🔥)
       if (listType == RetailerListType.today) {
-        final today = DateTime.now();
+        final now = DateTime.now();
+        final today = DateTime(now.year, now.month, now.day);
+
+        debugPrint("📅 TODAY DATE: $today");
 
         filtered = list.where((e) {
-          final created = DateTime.tryParse(e.createdAt ?? "");
-          if (created == null) return false;
+          if (e.createdAt.isEmpty) {
+            debugPrint("❌ EMPTY DATE => ${e.retailerName}");
+            return false;
+          }
 
-          return created.year == today.year &&
-              created.month == today.month &&
-              created.day == today.day;
+          DateTime? created;
+
+          try {
+            created = DateTime.parse(e.createdAt).toLocal(); // 🔥 IMPORTANT FIX
+          } catch (err) {
+            debugPrint("❌ DATE PARSE ERROR => ${e.createdAt}");
+            return false;
+          }
+
+          final createdDate =
+          DateTime(created.year, created.month, created.day);
+
+          debugPrint(
+              "🧪 CHECK => ${e.retailerName} | API: ${e.createdAt} | PARSED: $createdDate");
+
+          return createdDate == today;
         }).toList();
+
+        debugPrint("✅ TODAY FILTER COUNT: ${filtered.length}");
       }
 
       retailerList.assignAll(
         filtered.map((e) => RetailerModel.fromApi(e)).toList(),
       );
+
+      debugPrint("📦 FINAL LIST COUNT: ${retailerList.length}");
 
       _search();
     } catch (e) {
@@ -329,7 +403,6 @@ class RetailerController extends GetxController {
       isLoading.value = false;
     }
   }
-
   /// ✅ SEARCH (same as before)
   void _search() {
     final q = searchCtrl.text.trim().toLowerCase();

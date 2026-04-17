@@ -86,6 +86,8 @@ class KeyTransactionsController extends GetxController {
   final _service = KeyTransactionsService();
   final scrollController = ScrollController();
 
+  var filterType = "all".obs;
+
   @override
   void onInit() {
     super.onInit();
@@ -186,14 +188,81 @@ class KeyTransactionsController extends GetxController {
   //   }).toList();
   // }
 
+  // List<TransactionModel> _mapTransactions(List<KeyLedgerItem> items) {
+  //   return items
+  //   // ✅ FILTER: only "transfer" show
+  //       .where((e) {
+  //     final source = (e.source ?? "").toLowerCase();
+  //     final isValid = source == "transfer";
+  //
+  //     debugPrint("🔍 SOURCE: $source -> ${isValid ? "✅ KEEP" : "❌ REMOVE"}");
+  //
+  //     return isValid;
+  //   })
+  //       .map((e) {
+  //     final isCredit = e.type == "credit";
+  //
+  //     final dt = DateTime.tryParse(e.createdAt)?.toLocal();
+  //
+  //     return TransactionModel(
+  //       isCredit: isCredit,
+  //       title: isCredit ? "Received By" : "Sent To",
+  //       name: e.counterpartyName ?? "-",
+  //       date: dt != null
+  //           ? "${dt.day}-${dt.month}-${dt.year}"
+  //           : "-",
+  //       time: dt != null
+  //           ? "${dt.hour}:${dt.minute}"
+  //           : "-",
+  //       amount: "${isCredit ? "+" : "-"}${e.totalUnits}",
+  //     );
+  //   })
+  //       .toList();
+  // }
+
+  // List<TransactionModel> get filteredTransactions {
+  //   if (selectedKey.value == KeyType.android) {
+  //     // 👉 transfer only
+  //     return transactions
+  //         .where((t) => t.title != "Used For")
+  //         .toList();
+  //   } else {
+  //     // 👉 used only
+  //     return transactions
+  //         .where((t) => t.title == "Used For")
+  //         .toList();
+  //   }
+  // }
+
+  List<TransactionModel> get filteredTransactions {
+    // 👉 iPhone tab → no data (already handled UI)
+    if (selectedKey.value == KeyType.iphone) {
+      return [];
+    }
+
+    // 👉 Used filter
+    if (filterType.value == "used") {
+      return transactions
+          .where((t) => t.title == "Used For")
+          .toList();
+    }
+
+    // 👉 Default (Total → ALL)
+    return transactions;
+  }
   List<TransactionModel> _mapTransactions(List<KeyLedgerItem> items) {
     return items
-    // ✅ FILTER: only "transfer" show
+    // ✅ FILTER: show transfer + usage
         .where((e) {
       final source = (e.source ?? "").toLowerCase();
-      final isValid = source == "transfer";
 
-      debugPrint("🔍 SOURCE: $source -> ${isValid ? "✅ KEEP" : "❌ REMOVE"}");
+      final isTransfer = source == "transfer";
+      final isUsage = source == "usage" || source == "used";
+
+      final isValid = isTransfer || isUsage;
+
+      debugPrint(
+          "🔍 SOURCE: $source -> ${isValid ? "✅ KEEP" : "❌ REMOVE"}");
 
       return isValid;
     })
@@ -202,10 +271,21 @@ class KeyTransactionsController extends GetxController {
 
       final dt = DateTime.tryParse(e.createdAt)?.toLocal();
 
+      // ✅ Title handling (important)
+      String title;
+      if ((e.source ?? "").toLowerCase() == "usage") {
+        title = "Used For";
+      } else {
+        title = isCredit ? "Received By" : "Sent To";
+      }
+
       return TransactionModel(
         isCredit: isCredit,
-        title: isCredit ? "Received By" : "Sent To",
-        name: e.counterpartyName ?? "-",
+        title: title,
+        // name: e.counterpartyName ?? "-",
+        name: (e.source ?? "").toLowerCase() == "usage"
+            ? e.description
+            : e.counterpartyName ?? "-",
         date: dt != null
             ? "${dt.day}-${dt.month}-${dt.year}"
             : "-",
