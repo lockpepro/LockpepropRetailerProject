@@ -367,6 +367,7 @@ class DashCustomerSelf {
   int? active;
   int? pending;
   int? deleted;
+  int? lock;
   DashCustomerNewToday? newToday; // ✅ ADD THIS
 
   DashCustomerSelf.fromJson(Map<String, dynamic> json) {
@@ -374,6 +375,7 @@ class DashCustomerSelf {
     active = _toInt(json['active']);
     pending = _toInt(json['pending']);
     deleted = _toInt(json['deleted']);
+    lock = _toInt(json['lock']);
     // ✅ FIX HERE
     newToday = json['new_today'] != null
         ? DashCustomerNewToday.fromJson(json['new_today'])

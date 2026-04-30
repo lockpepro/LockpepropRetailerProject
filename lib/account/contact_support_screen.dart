@@ -78,23 +78,23 @@ class ContactSupportScreen extends StatelessWidget {
                 //   subtitle: "Call us at ${c.supportPhone}",
                 //   onTap: c.openPhone,
                 // ),
-                _supportTile(
-                  icon: Icons.phone_outlined,
-                  title: "Phone",
-                  subtitle: "Call us at ${c.supportPhone}",
-                  onTap: () => c.openPhone(c.supportPhone),
-                ),
+                // _supportTile(
+                //   icon: Icons.phone_outlined,
+                //   title: "Phone",
+                //   subtitle: "Call us at ${c.supportPhone}",
+                //   onTap: () => c.openPhone(c.supportPhone),
+                // ),
+                //
+                // const SizedBox(height: 20),
+                //
+                // _supportTile(
+                //   icon: Icons.phone_outlined,
+                //   title: "Phone",
+                //   subtitle: "Call us at ${c.supportPhone2}",
+                //   onTap: () => c.openPhone(c.supportPhone2),
+                // ),
 
-                const SizedBox(height: 20),
-
-                _supportTile(
-                  icon: Icons.phone_outlined,
-                  title: "Phone",
-                  subtitle: "Call us at ${c.supportPhone2}",
-                  onTap: () => c.openPhone(c.supportPhone2),
-                ),
-
-                const SizedBox(height: 20),
+                // const SizedBox(height: 20),
 
                 // WHATSAPP
                 // _supportTile(
@@ -103,21 +103,42 @@ class ContactSupportScreen extends StatelessWidget {
                 //   subtitle: "Message on ${c.supportPhone}",
                 //   onTap: c.openWhatsApp,
                 // ),
-                _supportTile(
-                  icon: Icons.message,
-                  title: "WhatsApp",
-                  subtitle: "Message on ${c.supportPhone}",
-                  onTap: () => c.openWhatsApp(c.supportPhone),
-                ),
+                // _supportTile(
+                //   icon: Icons.message,
+                //   title: "WhatsApp",
+                //   subtitle: "Message on ${c.supportPhone}",
+                //   onTap: () => c.openWhatsApp(c.supportPhone),
+                // ),
+                //
+                // const SizedBox(height: 20),
+                //
+                // _supportTile(
+                //   icon: Icons.message,
+                //   title: "WhatsApp",
+                //   subtitle: "Message on ${c.supportPhone2}",
+                //   onTap: () => c.openWhatsApp(c.supportPhone2),
+                // ),
+                // PHONE LIST
+                ...c.supportPhones.map((phone) => Padding(
+                  padding: const EdgeInsets.only(bottom: 20),
+                  child: _supportTile(
+                    icon: Icons.phone_outlined,
+                    title: "Phone",
+                    subtitle: "Call us at $phone",
+                    onTap: () => c.openPhone(phone),
+                  ),
+                )).toList(),
 
-                const SizedBox(height: 20),
-
-                _supportTile(
-                  icon: Icons.message,
-                  title: "WhatsApp",
-                  subtitle: "Message on ${c.supportPhone2}",
-                  onTap: () => c.openWhatsApp(c.supportPhone2),
-                ),
+// WHATSAPP LIST
+                ...c.supportPhones.map((phone) => Padding(
+                  padding: const EdgeInsets.only(bottom: 20),
+                  child: _supportTile(
+                    icon: Icons.message,
+                    title: "WhatsApp",
+                    subtitle: "Message on $phone",
+                    onTap: () => c.openWhatsApp(phone),
+                  ),
+                )).toList(),
               ],
             ),
           ),

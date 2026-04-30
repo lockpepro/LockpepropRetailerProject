@@ -55,6 +55,14 @@ class ContactSupportController extends GetxController {
   final supportPhone = "+918810422690";
   final supportPhone2 = "+918810422689";
 
+  final List<String> supportPhones = [
+    "+918810422646",
+    "+918810422678",
+    "+918810422686",
+    "+918810422689",
+    "+918810422690",
+  ].toSet().toList(); // ✅ removes duplicates automatically
+
   /// ---------------- EMAIL ----------------
   void openEmail() async {
     final Uri emailUri = Uri(
