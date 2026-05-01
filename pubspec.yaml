@@ -20,7 +20,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.1+15
 
 environment:
-  sdk: ^3.8.0
+  sdk: ">=9.0.0 <10.0.0"
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -28,9 +28,7 @@ environment:
 # dependencies can be manually updated by changing the version numbers below to
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
-dependencies:
-  flutter:
-    sdk: flutter
+
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -48,36 +46,33 @@ dependencies:
   google_fonts: ^5.0.0 # Fonts
 
   image_picker: ^1.2.1
-  signature: ^6.3.0
   http: ^1.6.0
 
   url_launcher: ^6.3.2
   qr_flutter: ^4.1.0
   get_storage: ^2.1.1
 
-  pdf: ^3.11.1
-  printing: ^5.13.1
+  pdf:
+  printing:
 
   path_provider: ^2.1.4
-  open_filex: ^4.5.0
-  permission_handler: ^11.3.1
-  mobile_scanner: ^4.0.1
+  open_filex: ^0.5.0
+  permission_handler:
+  mobile_scanner:
 
 
-  flutter_launcher_icons: ^0.13.1
+  flutter_launcher_icons:
 
-  geocoding: ^2.1.0
-  package_info_plus: ^4.2.0
-  flutter_secure_storage: ^9.0.0
-  flutter_screenutil: ^5.9.3
+  geocoding:
+  package_info_plus:
+  flutter_secure_storage:
+  flutter_screenutil:
 #  video_player: ^2.8.2
 
 #  url_launcher: ^6.2.5
 
 
-dev_dependencies:
-  flutter_test:
-    sdk: flutter
+
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -98,23 +93,12 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/
-    - assets/gif/
-    - assets/images/
-    - assets/icons/
-    - assets/icons/commands/
-    - assets/accounts/
+    - assets
 #    - assets/videos/
 #    - assets/svgs/
 #    - assets/gifs/
 #    - assets/lottie/
 
-flutter_icons:
-  android: true
-  ios: true
-  image_path: assets/icons/app_icon.png
-  min_sdk_android: 21
-  remove_alpha_ios: true
 
   # To add assets to your application, add an assets section, like this:
   # assets:

@@ -41,7 +41,7 @@ import 'app/routes/app_pages.dart';
 
 // 👇 ADD THIS IMPORT
 import 'enter_pin_page.dart'; // jahan tumne EnterPinPage rakha hai
-import 'app/services/mpin_service.dart';
+import 'app/services/mpin.service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

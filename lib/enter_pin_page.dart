@@ -4,7 +4,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 
 import 'app/routes/app_routes.dart';
-import 'app/services/mpin_service.dart';
+import 'app/services/mpin.service.dart';
 
 import 'package:get/get.dart';
 
@@ -218,133 +218,7 @@ class CreatePinPage extends StatefulWidget {
   State<CreatePinPage> createState() => _CreatePinPageState();
 }
 
-// class _CreatePinPageState extends State<CreatePinPage> {
-//   final mpinService = MpinService();
-//   String pin = "";
-//
-//   void addDigit(String value) async {
-//     if (pin.length < 4) {
-//       setState(() => pin += value);
-//
-//       if (pin.length == 4) {
-//         await mpinService.savePin(pin);
-//
-//         // Get.offAllNamed(AppRoutes.ROLE);
-//         final role = Get.arguments?["role"];
-//         goToDashboard(role);
-//       }
-//     }
-//   }
-//
-//   void removeDigit() {
-//     if (pin.isNotEmpty) {
-//       setState(() => pin = pin.substring(0, pin.length - 1));
-//     }
-//   }
-//
-//   Widget buildDot(int index) {
-//     return Container(
-//       margin: const EdgeInsets.symmetric(horizontal: 8),
-//       width: 16,
-//       height: 16,
-//       decoration: BoxDecoration(
-//         shape: BoxShape.circle,
-//         color: index < pin.length
-//             ? const Color(0xFF1F3BB3)
-//             : Colors.grey.withOpacity(0.3),
-//       ),
-//     );
-//   }
-//
-//   Widget buildKey(String number) {
-//     return InkWell(
-//       onTap: () => addDigit(number),
-//       child: Container(
-//         height: 70,
-//         width: 70,
-//         decoration: BoxDecoration(
-//           shape: BoxShape.circle,
-//           gradient: const LinearGradient(
-//             colors: [Color(0xFFEEF2FF), Color(0xFFDDE5FF)],
-//           ),
-//         ),
-//         child: Center(
-//           child: Text(
-//             number,
-//             style: const TextStyle(fontSize: 24),
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-//
-//   Widget buildBackspace() {
-//     return InkWell(
-//       onTap: removeDigit,
-//       child: Container(
-//         height: 70,
-//         width: 70,
-//         decoration: BoxDecoration(
-//           shape: BoxShape.circle,
-//           color: Colors.red.withOpacity(0.1),
-//         ),
-//         child: const Icon(Icons.backspace_outlined, color: Colors.red),
-//       ),
-//     );
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       backgroundColor: const Color(0xFFF7F9FF),
-//       body: SafeArea(
-//         child: Column(
-//           children: [
-//             const SizedBox(height: 40),
-//             const Text("Set MPIN",
-//                 style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
-//             const SizedBox(height: 40),
-//
-//             Row(
-//               mainAxisAlignment: MainAxisAlignment.center,
-//               children: List.generate(4, buildDot),
-//             ),
-//
-//             const SizedBox(height: 50),
-//
-//             Expanded(
-//               child: Column(
-//                 mainAxisAlignment: MainAxisAlignment.center,
-//                 children: [
-//                   Row(
-//                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//                       children: ["1", "2", "3"].map(buildKey).toList()),
-//                   const SizedBox(height: 15),
-//                   Row(
-//                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//                       children: ["4", "5", "6"].map(buildKey).toList()),
-//                   const SizedBox(height: 15),
-//                   Row(
-//                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//                       children: ["7", "8", "9"].map(buildKey).toList()),
-//                   const SizedBox(height: 15),
-//                   Row(
-//                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//                     children: [
-//                       const SizedBox(width: 70),
-//                       buildKey("0"),
-//                       buildBackspace(),
-//                     ],
-//                   ),
-//                 ],
-//               ),
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
+
 
 class _CreatePinPageState extends State<CreatePinPage> {
   final mpinService = MpinService();

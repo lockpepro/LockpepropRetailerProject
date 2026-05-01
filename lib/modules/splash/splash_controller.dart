@@ -15,7 +15,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:zlock_smart_finance/app/services/dio_client.dart';
-import 'package:zlock_smart_finance/app/services/mpin_service.dart';
+import 'package:zlock_smart_finance/app/services/mpin.service.dart';
 import '../../app/routes/app_routes.dart';
 
 class SplashController extends GetxController {
