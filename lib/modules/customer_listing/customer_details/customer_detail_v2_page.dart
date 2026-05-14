@@ -466,7 +466,7 @@ class CustomerDetailV2Page extends StatelessWidget {
             itemCount: ctrl.orderedCommands.length,
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 3,
-              childAspectRatio: 1,
+              childAspectRatio: 0.77,
               crossAxisSpacing: 12,
               mainAxisSpacing: 12,
             ),
@@ -505,6 +505,13 @@ class CustomerDetailV2Page extends StatelessWidget {
                   onChanged: isComingSoon
                       ? (_) {}
                       : (v) async {
+
+                    /// ✅ AUDIO POPUP
+                    if (internalKey == "Audio") {
+                      showAudioAlertDialog();
+                      return;
+                    }
+
 
                     /// ✅ CONFIRMATION ONLY FOR THESE 2
                     if (internalKey == "Lock Device" ||
@@ -920,6 +927,208 @@ class CustomerDetailV2Page extends StatelessWidget {
     );
   }
 
+  void showAudioAlertDialog() {
+    final TextEditingController messageCtrl = TextEditingController();
+    bool isLoading = false;
+
+    Get.dialog(
+      Dialog(
+        insetPadding: const EdgeInsets.symmetric(horizontal: 20),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(24),
+        ),
+        child: StatefulBuilder(
+          builder: (context, setState) {
+            return Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(24),
+                gradient: const LinearGradient(
+                  colors: [
+                    Color(0xFFF7F9FF),
+                    Color(0xFFEAF0FF),
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+
+                  /// ICON
+                  Container(
+                    padding: const EdgeInsets.all(14),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: const Color(0xff4F6BED).withOpacity(.1),
+                    ),
+                    child: const Icon(
+                      Icons.volume_up,
+                      color: Color(0xff4F6BED),
+                      size: 28,
+                    ),
+                  ),
+
+                  const SizedBox(height: 14),
+
+                  const Text(
+                    "Play Audio Alert",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+
+                  const SizedBox(height: 8),
+
+                  const Text(
+                    "Enter message to send alert",
+                    style: TextStyle(
+                      color: Colors.grey,
+                      fontSize: 12,
+                    ),
+                  ),
+
+                  const SizedBox(height: 18),
+
+                  /// MESSAGE FIELD
+                  TextField(
+                    controller: messageCtrl,
+                    maxLines: 3,
+                    decoration: InputDecoration(
+                      hintText: "Type alert message...",
+                      filled: true,
+                      fillColor: Colors.white,
+                      contentPadding: const EdgeInsets.all(14),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(14),
+                        borderSide: BorderSide(
+                          color: Colors.grey.shade300,
+                        ),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(14),
+                        borderSide: BorderSide(
+                          color: Colors.grey.shade300,
+                        ),
+                      ),
+                      focusedBorder: const OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(14)),
+                        borderSide: BorderSide(
+                          color: Color(0xff4F6BED),
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 22),
+
+                  Row(
+                    children: [
+
+                      /// CANCEL
+                      Expanded(
+                        child: OutlinedButton(
+                          onPressed: isLoading
+                              ? null
+                              : () => Navigator.pop(context),
+                          style: OutlinedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(vertical: 14),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(14),
+                            ),
+                          ),
+                          child: const Text("Cancel"),
+                        ),
+                      ),
+
+                      const SizedBox(width: 10),
+
+                      /// SEND
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: isLoading
+                              ? null
+                              : () async {
+
+                            final msg = messageCtrl.text.trim();
+
+                            if (msg.isEmpty) {
+                              Get.snackbar(
+                                "Error",
+                                "Please enter message",
+                              );
+                              return;
+                            }
+
+                            setState(() => isLoading = true);
+
+                            final success =
+                            await ctrl.sendAudioAlert(msg);
+
+                            setState(() => isLoading = false);
+
+                            // if (success) {
+                            //   Get.back();
+                            // }
+                            if (success) {
+
+                              /// keyboard close
+                              FocusManager.instance.primaryFocus?.unfocus();
+
+                              /// dialog close
+                              if (Get.isDialogOpen ?? false) {
+                                Navigator.pop(context);
+                              }
+
+                              await Future.delayed(const Duration(milliseconds: 200));
+
+                              Get.snackbar(
+                                "Success",
+                                "Voice alert sent",
+                                snackPosition: SnackPosition.BOTTOM,
+                                backgroundColor: Colors.green,
+                                colorText: Colors.white,
+                                margin: const EdgeInsets.all(12),
+                                duration: const Duration(seconds: 2),
+                              );
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xff4F6BED),
+                            padding: const EdgeInsets.symmetric(vertical: 14),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(14),
+                            ),
+                          ),
+                          child: isLoading
+                              ? const SizedBox(
+                            height: 18,
+                            width: 18,
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                              strokeWidth: 2,
+                            ),
+                          )
+                              : const Text(
+                            "Send",
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
 
   Widget _socialMediaModernCard({
     required bool value,
@@ -1104,6 +1313,73 @@ class CustomerDetailV2Page extends StatelessWidget {
       ),
     );
   }
+
+  // Widget _miniCommandCard({
+  //   required String title,
+  //   required String iconPath,
+  //   required bool value,
+  //   required bool loading,
+  //   required ValueChanged<bool> onChanged,
+  //   required bool isDisabled,
+  //
+  // }) {
+  //   return Opacity(
+  //     opacity: isDisabled ? 0.5 : 1,
+  //     child: Container(
+  //       padding: const EdgeInsets.all(8),
+  //       decoration: BoxDecoration(
+  //         borderRadius: BorderRadius.circular(16),
+  //         border: Border.all(color: const Color(0xff4F6BED)),
+  //         color: Colors.white,
+  //       ),
+  //       child: Column(
+  //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //         mainAxisSize: MainAxisSize.min, // ✅ IMPORTANT
+  //         children: [
+  //
+  //           /// ICON
+  //           SvgPicture.asset(iconPath, height: 20),
+  //
+  //           /// TEXT (FIXED)
+  //           Expanded(
+  //             child: Center(
+  //               child: Text(
+  //                 title,
+  //                 textAlign: TextAlign.center,
+  //                 maxLines: 2,
+  //                 overflow: TextOverflow.ellipsis,
+  //                 style: const TextStyle(fontSize: 10),
+  //               ),
+  //             ),
+  //           ),
+  //           if (isDisabled)
+  //             const Text(
+  //               "Coming Soon",
+  //               style: TextStyle(fontSize: 9, color: Colors.red),
+  //             ),
+  //
+  //           /// SWITCH / LOADER
+  //           loading
+  //               ? const SizedBox(
+  //             height: 14,
+  //             width: 14,
+  //             child: CircularProgressIndicator(strokeWidth: 2),
+  //           )
+  //               : Transform.scale(
+  //             scale: 0.7,
+  //             child: Switch(
+  //               value: value,
+  //               // onChanged: onChanged,
+  //               onChanged: isDisabled ? null : onChanged,
+  //               activeTrackColor: const Color(0xff4F6BED),
+  //             ),
+  //           ),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
+
   Widget _miniCommandCard({
     required String title,
     required String iconPath,
@@ -1111,60 +1387,91 @@ class CustomerDetailV2Page extends StatelessWidget {
     required bool loading,
     required ValueChanged<bool> onChanged,
     required bool isDisabled,
-
   }) {
     return Opacity(
       opacity: isDisabled ? 0.5 : 1,
-      child: Container(
-        padding: const EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: const Color(0xff4F6BED)),
-          color: Colors.white,
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          mainAxisSize: MainAxisSize.min, // ✅ IMPORTANT
-          children: [
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: title == "Audio"
+              ? () => onChanged(true)
+              : null,
+          borderRadius: BorderRadius.circular(18),
+          child: Ink(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(18),
+              color: Colors.white,
+              border: Border.all(color: const Color(0xff4F6BED)),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                vertical: 12,
+                horizontal: 8,
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
 
-            /// ICON
-            SvgPicture.asset(iconPath, height: 20),
+                  /// ICON
+                  Container(
+                    height: 42,
+                    width: 42,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.06),
+                          blurRadius: 6,
+                        )
+                      ],
+                    ),
+                    padding: const EdgeInsets.all(10),
+                    child: SvgPicture.asset(
+                      iconPath,
+                      fit: BoxFit.contain,
+                    ),
+                  ),
 
-            /// TEXT (FIXED)
-            Expanded(
-              child: Center(
-                child: Text(
-                  title,
-                  textAlign: TextAlign.center,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(fontSize: 10),
-                ),
+                  const SizedBox(height: 10),
+
+                  /// TITLE
+                  Text(
+                    title,
+                    textAlign: TextAlign.center,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                      color: Color(0xff1E2A5A),
+                    ),
+                  ),
+
+                  if (title != "Audio") ...[
+                    const SizedBox(height: 10),
+
+                    loading
+                        ? const SizedBox(
+                      height: 14,
+                      width: 14,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                        : Transform.scale(
+                      scale: 0.7,
+                      child: Switch(
+                        value: value,
+                        onChanged:
+                        isDisabled ? null : onChanged,
+                        activeTrackColor:
+                        const Color(0xff4F6BED),
+                      ),
+                    ),
+                  ],
+                ],
               ),
             ),
-            if (isDisabled)
-              const Text(
-                "Coming Soon",
-                style: TextStyle(fontSize: 9, color: Colors.red),
-              ),
-
-            /// SWITCH / LOADER
-            loading
-                ? const SizedBox(
-              height: 14,
-              width: 14,
-              child: CircularProgressIndicator(strokeWidth: 2),
-            )
-                : Transform.scale(
-              scale: 0.7,
-              child: Switch(
-                value: value,
-                // onChanged: onChanged,
-                onChanged: isDisabled ? null : onChanged,
-                activeTrackColor: const Color(0xff4F6BED),
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );

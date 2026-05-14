@@ -4,7 +4,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 
 import 'app/routes/app_routes.dart';
-import 'app/services/mpin.service.dart';
+import 'app/services/mpin_service.dart';
 
 import 'package:get/get.dart';
 

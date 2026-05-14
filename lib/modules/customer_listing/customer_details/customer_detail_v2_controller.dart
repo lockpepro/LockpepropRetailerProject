@@ -408,6 +408,7 @@
       // "Volume": "Volume",
       // "Wallpaper": "Wallpaper",
       "Audio": "Audio",
+      "Active Restriction": "ACTIVE_RESTRICTION",
       // "Deactive Restriction": "DEACTIVE_RESTRICTION",
     };
     // List<String> mainCommands = [
@@ -459,6 +460,7 @@
     }
 
     final Map<String, Map<bool, String>> _commandMap = {
+      "Location": {true: "GET_LOCATION", false: "GET_LOCATION"},
       "Offline Location": {true: "GET_LOCATION", false: "GET_LOCATION"},
       "Lock Device": {true: "LOCK_DEVICE", false: "UNLOCK_DEVICE"},
       // "Sim Lock": {true: "LOCK_SIM", false: "UNLOCK_SIM"},
@@ -520,7 +522,7 @@
       // "Offline Lock",
       "Volume",
       "Wallpaper",
-      "Audio",
+      // "Audio",
     };
 
     Future<void> onCommandToggle(String key, bool value) async {
@@ -720,152 +722,6 @@
     final agreementPath = "".obs;
 
 
-
-    // Future<void> generateAgreementFromCustomerDetail() async {
-    //   if (isGeneratingAgreement.value) return;
-    //
-    //   try {
-    //     isGeneratingAgreement.value = true;
-    //
-    //     // final Uint8List? signBytes = await signatureController.toPngBytes();
-    //     //
-    //     // if (signBytes == null || signBytes.isEmpty) {
-    //     //   Get.snackbar("Error", "Signature required",
-    //     //       snackPosition: SnackPosition.BOTTOM);
-    //     //   return;
-    //     // }
-    //     Uint8List? signBytes;
-    //
-    //     final signatureUrl = customer.value?.signature ?? "";
-    //
-    //     if (signatureUrl.isNotEmpty) {
-    //       try {
-    //         final response = await Dio().get(
-    //           signatureUrl,
-    //           options: Options(responseType: ResponseType.bytes),
-    //         );
-    //
-    //         signBytes = Uint8List.fromList(response.data);
-    //       } catch (e) {
-    //         debugPrint("❌ Signature load error: $e");
-    //       }
-    //     }
-    //
-    //     if (signBytes == null || signBytes.isEmpty) {
-    //       Get.snackbar(
-    //         "Error",
-    //         "Signature not available",
-    //         snackPosition: SnackPosition.BOTTOM,
-    //       );
-    //       return;
-    //     }
-    //
-    //     final pdf = pw.Document();
-    //
-    //     String line(String v, {int len = 30}) {
-    //       if (v.trim().isEmpty) return "_" * len;
-    //       return v;
-    //     }
-    //
-    //     final now = DateTime.now();
-    //     final dateStr =
-    //         "${now.day.toString().padLeft(2, '0')}-${now.month.toString().padLeft(2, '0')}-${now.year}";
-    //
-    //     final logo = pw.MemoryImage(
-    //       (await rootBundle.load('assets/images/lock_pe.png'))
-    //           .buffer
-    //           .asUint8List(),
-    //     );
-    //
-    //     pdf.addPage(
-    //       pw.MultiPage(
-    //         pageFormat: PdfPageFormat.a4,
-    //         margin: const pw.EdgeInsets.all(24),
-    //         build: (context) => [
-    //
-    //           /// 🔹 LOGO
-    //           pw.Center(child: pw.Image(logo, height: 60)),
-    //           pw.SizedBox(height: 10),
-    //
-    //           pw.Text(
-    //             "EMI Device Purchase Agreement",
-    //             style: pw.TextStyle(
-    //               fontSize: 14,
-    //               fontWeight: pw.FontWeight.bold,
-    //             ),
-    //           ),
-    //
-    //           pw.SizedBox(height: 12),
-    //
-    //           /// ✅ REAL DATA FROM CONTROLLER
-    //           pw.Text("Customer Name: ${line(customerName)}"),
-    //           pw.Text("Mobile: ${line(customerPhone)}"),
-    //           pw.Text("Email: ${line(customerEmail)}"),
-    //           pw.Text("Loan ID: ${line(loanId)}"),
-    //
-    //           pw.SizedBox(height: 10),
-    //
-    //           pw.Text("Device: ${line(brandModel)}"),
-    //           pw.Text("IMEI: ${line(imei1)}"),
-    //
-    //           pw.SizedBox(height: 10),
-    //
-    //           pw.Text("Loan Amount: ₹ ${loanAmount.toStringAsFixed(0)}"),
-    //           pw.Text("EMI Amount: ₹ ${emiAmount.toStringAsFixed(0)}"),
-    //           pw.Text("Tenure: $tenure months"),
-    //
-    //           pw.SizedBox(height: 20),
-    //
-    //           pw.Text("Agreement Date: $dateStr"),
-    //
-    //           pw.SizedBox(height: 30),
-    //
-    //           /// 🔹 SIGNATURE
-    //           pw.Row(
-    //             mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-    //             children: [
-    //               pw.Column(
-    //                 children: [
-    //                   pw.Text("Customer Signature"),
-    //                   pw.Container(
-    //                     width: 150,
-    //                     height: 60,
-    //                     child: pw.Image(
-    //                       pw.MemoryImage(signBytes!),
-    //                       fit: pw.BoxFit.contain,
-    //                     ),
-    //                   ),
-    //                 ],
-    //               ),
-    //               pw.Column(
-    //                 children: [
-    //                   pw.Text("Authorized Signature"),
-    //                   pw.SizedBox(height: 60),
-    //                 ],
-    //               ),
-    //             ],
-    //           ),
-    //         ],
-    //       ),
-    //     );
-    //
-    //     final dir = await getExternalStorageDirectory();
-    //     final file = File("${dir!.path}/Agreement_${now.millisecondsSinceEpoch}.pdf");
-    //
-    //     await file.writeAsBytes(await pdf.save());
-    //
-    //     Get.snackbar("Success", "Agreement Generated",
-    //         snackPosition: SnackPosition.BOTTOM);
-    //
-    //     await OpenFilex.open(file.path);
-    //
-    //   } catch (e) {
-    //     Get.snackbar("Error", "PDF generation failed",
-    //         snackPosition: SnackPosition.BOTTOM);
-    //   } finally {
-    //     isGeneratingAgreement.value = false;
-    //   }
-    // }
 
     Future<void> generateAgreementFromCustomerDetail() async {
       if (isGeneratingAgreement.value) return;
@@ -1171,80 +1027,6 @@
       }
     }
 
-    // Future<List<String>> fetchSimNumbers() async {
-    //   final id = actualDeviceId;
-    //
-    //   debugPrint("📱 STEP 0: Device ID => $id");
-    //
-    //   if (id.isEmpty) {
-    //     Get.snackbar("Error", "Device ID missing");
-    //     return [];
-    //   }
-    //
-    //   try {
-    //     /// 🔹 STEP 1: SEND COMMAND
-    //     await _commandService.sendCommand(
-    //       DeviceCommandRequest(
-    //         deviceId: id,
-    //         commandType: "GET_NUMBER",
-    //       ),
-    //     );
-    //
-    //     debugPrint("✅ COMMAND SENT");
-    //
-    //     /// ⏳ WAIT for device response
-    //     await Future.delayed(const Duration(seconds: 3));
-    //
-    //     /// 🔹 STEP 2: CALL CORRECT API
-    //     final dio = Dio();
-    //
-    //     final url =
-    //         "https://lockpepro.com/api/mdm/devices/$id/sim-info";
-    //
-    //     debugPrint("🌐 URL => $url");
-    //
-    //     final response = await dio.get(
-    //       url,
-    //       options: Options(
-    //         headers: {
-    //           "Authorization": "Bearer ${box.read("token")}",
-    //           "Accept": "application/json",
-    //         },
-    //       ),
-    //     );
-    //
-    //     debugPrint("📦 RESPONSE => ${response.data}");
-    //
-    //     /// ✅ SAFE PARSE
-    //     if (response.data is! Map) {
-    //       debugPrint("❌ NOT JSON RESPONSE");
-    //       return [];
-    //     }
-    //
-    //     final data = response.data;
-    //
-    //     if (data["success"] != true) {
-    //       return [];
-    //     }
-    //
-    //     final simInfo = data["sim_info"] ?? {};
-    //
-    //     List<String> numbers = [];
-    //
-    //     final sim1 = simInfo["sim1_number"]?.toString() ?? "";
-    //     final sim2 = simInfo["sim2_number"]?.toString() ?? "";
-    //
-    //     if (sim1.isNotEmpty) numbers.add(sim1);
-    //     if (sim2.isNotEmpty) numbers.add(sim2);
-    //
-    //     debugPrint("📲 FINAL NUMBERS => $numbers");
-    //
-    //     return numbers;
-    //   } catch (e) {
-    //     debugPrint("❌ ERROR => $e");
-    //     return [];
-    //   }
-    // }
     Future<List<String>> fetchSimNumbers() async {
       final id = actualDeviceId;
 
@@ -1312,33 +1094,6 @@
         return [];
       }
     }
-
-    // Future<void> scheduleLockApi(String scheduleAt) async {
-    //   try {
-    //     final payload = {
-    //       "device_id": actualDeviceId,
-    //       "command_type": "LOCK_DEVICE",
-    //       "schedule_type": "one_time",
-    //       "scheduled_at": scheduleAt,
-    //       "label": "Scheduled Lock",
-    //       "delivery_method": "fcm"
-    //     };
-    //
-    //     debugPrint("📤 SCHEDULER API PAYLOAD => $payload");
-    //
-    //     final res = await Dio().post(
-    //       "https://lockpepro.com/api/scheduled-commands",
-    //       data: payload,
-    //     );
-    //
-    //     debugPrint("✅ SCHEDULER RESPONSE => ${res.data}");
-    //
-    //     Get.snackbar("Success", "Lock Scheduled");
-    //   } catch (e) {
-    //     debugPrint("❌ SCHEDULER ERROR => $e");
-    //     Get.snackbar("Error", "Scheduler failed");
-    //   }
-    // }
 
     Future<void> scheduleLockApi(String scheduleAt) async {
       try {
@@ -1414,6 +1169,7 @@
         Get.snackbar("Error", "Scheduler failed");
       }
     }
+
     Future<void> sendOfflineCommandApi({
       required String number,
       required bool isLock,
@@ -1448,84 +1204,6 @@
       }
     }
 
-    // Future<void> handleOfflineCommand(bool isLock) async {
-    //   if (actualDeviceId.isEmpty) {
-    //     Get.snackbar("Error", "Device ID missing");
-    //     return;
-    //   }
-    //
-    //   /// 🔹 LOADING
-    //   Get.dialog(
-    //     const Center(child: CircularProgressIndicator()),
-    //     barrierDismissible: false,
-    //   );
-    //
-    //   List<String> numbers = [];
-    //
-    //   try {
-    //     numbers = await fetchSimNumbers();
-    //   } catch (e) {
-    //     debugPrint("❌ SIM ERROR => $e");
-    //   }
-    //
-    //   if (Get.isDialogOpen ?? false) Get.back();
-    //
-    //   /// 🔹 SELECT / INPUT POPUP
-    //   Get.dialog(
-    //     Dialog(
-    //       shape: RoundedRectangleBorder(
-    //         borderRadius: BorderRadius.circular(16),
-    //       ),
-    //       child: Padding(
-    //         padding: const EdgeInsets.all(16),
-    //         child: Column(
-    //           mainAxisSize: MainAxisSize.min,
-    //           children: [
-    //
-    //             Text(
-    //               isLock ? "Offline Lock" : "Offline Unlock",
-    //               style: const TextStyle(fontWeight: FontWeight.bold),
-    //             ),
-    //
-    //             const SizedBox(height: 12),
-    //
-    //             /// 🔹 LIST
-    //             if (numbers.isNotEmpty)
-    //               ...numbers.map((num) => ListTile(
-    //                 title: Text(num),
-    //                 onTap: () async {
-    //                   await sendOfflineCommand(
-    //                     number: num,
-    //                     isLock: isLock,
-    //                   );
-    //                   Get.back();
-    //                 },
-    //               )),
-    //
-    //             /// 🔹 INPUT
-    //             if (numbers.isEmpty)
-    //               TextField(
-    //                 keyboardType: TextInputType.phone,
-    //                 maxLength: 10,
-    //                 decoration: const InputDecoration(
-    //                   hintText: "Enter mobile number",
-    //                 ),
-    //                 onSubmitted: (value) async {
-    //                   if (value.isEmpty) return;
-    //                   await sendOfflineCommand(
-    //                     number: value,
-    //                     isLock: isLock,
-    //                   );
-    //                   // await sendOfflineCommand(value, isLock);
-    //                   Get.back();
-    //                 },
-    //               ),
-    //           ],
-    //         ),
-    //       ),
-    //     ),
-    //   );
-    // }
 
     Future<void> handleOfflineCommand(bool isLock) async {
       final id = actualDeviceId;
@@ -1543,31 +1221,7 @@
       // Get.find<CustomerDetailV2Page>()
       //     .showOfflineNumberDialog(isLock: isLock);
     }
-    // Future<void> sendOfflineCommand(String number, bool isLock) async {
-    //   try {
-    //     final url = isLock
-    //         ? "https://lockpepro.com/api/sms/send-lock"
-    //         : "https://lockpepro.com/api/sms/send-unlock";
-    //
-    //     final res = await Dio().post(
-    //       url,
-    //       data: {
-    //         "phone": number,
-    //         "deviceName": brandModel,
-    //       },
-    //     );
-    //
-    //     debugPrint("✅ OFFLINE RESPONSE => ${res.data}");
-    //
-    //     Get.snackbar(
-    //       "Success",
-    //       isLock ? "Device Locked" : "Device Unlocked",
-    //     );
-    //   } catch (e) {
-    //     debugPrint("❌ ERROR => $e");
-    //     Get.snackbar("Error", "Failed");
-    //   }
-    // }
+
 
     Future<void> handleOfflineFlow(bool isLock) async {
       if (actualDeviceId.isEmpty) {
@@ -1585,6 +1239,58 @@
       }
 
       // showNumberInputPopup(numbers, isLock);
+    }
+
+    Future<bool> sendAudioAlert(String message) async {
+      try {
+
+        if (actualDeviceId.isEmpty) {
+          Get.snackbar(
+            "Error",
+            "Device ID missing",
+          );
+          return false;
+        }
+
+        final response = await Dio().post(
+          "https://lockpepro.com/api/play-alert",
+          data: {
+            "device_id": actualDeviceId,
+            "message": message,
+          },
+        );
+
+        debugPrint("✅ AUDIO RESPONSE => ${response.data}");
+
+        if (response.statusCode == 200 &&
+            response.data["success"] == true) {
+
+          // Get.snackbar(
+          //   "Success",
+          //   response.data["message"] ?? "Voice alert sent",
+          // );
+
+          return true;
+        }
+
+        Get.snackbar(
+          "Error",
+          response.data["message"] ?? "Failed to send alert",
+        );
+
+        return false;
+
+      } catch (e) {
+
+        debugPrint("❌ AUDIO ALERT ERROR => $e");
+
+        Get.snackbar(
+          "Error",
+          "Something went wrong",
+        );
+
+        return false;
+      }
     }
 
     Future<void> viewDoc(String url) async {
@@ -1663,22 +1369,6 @@
         ),
       );
     }
-
-    // void updateLastUpdated(String createdAt) {
-    //   try {
-    //     DateTime utcTime = DateTime.parse(createdAt);
-    //
-    //     // Convert to local time (important)
-    //     DateTime localTime = utcTime.toLocal();
-    //
-    //     // Format nicely
-    //     String formatted = DateFormat('dd MMM yyyy, hh:mm a').format(localTime);
-    //
-    //     lastUpdatedText.value = "Updated on $formatted";
-    //   } catch (e) {
-    //     lastUpdatedText.value = "Updated just now";
-    //   }
-    // }
 
     void updateFromApiTime(String? createdAt) {
       if (createdAt == null || createdAt.isEmpty) {

@@ -1,9 +1,9 @@
 // ✅ services/distributor_add_retailer_service.dart
 import 'dart:io';
-import 'package:_dio.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:zlock_smart__finance/app/services/dio_client.dart';
-import 'package:zlock_smart__finance/app/services/retailer_api.dart';
+import 'package:zlock_smart_finance/app/services/dio_client.dart';
+import 'package:zlock_smart_finance/app/services/retailer_api.dart';
 import 'package:zlock_smart_finance/model/add_retailer_models.dart';
 
 // class DistributorAddRetailerService {
