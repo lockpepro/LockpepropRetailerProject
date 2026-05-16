@@ -1846,19 +1846,36 @@ class CustomerDetailV2Page extends StatelessWidget {
                   /// ⏰ TIME
                   InkWell(
                     onTap: () async {
+                      // final picked = await showTimePicker(
+                      //   context: context,
+                      //   initialTime: TimeOfDay.now(),
+                      // );
+
                       final picked = await showTimePicker(
                         context: context,
                         initialTime: TimeOfDay.now(),
+                        builder: (context, child) {
+                          return MediaQuery(
+                            data: MediaQuery.of(context).copyWith(
+                              alwaysUse24HourFormat: true,
+                            ),
+                            child: child!,
+                          );
+                        },
                       );
+
                       if (picked != null) {
                         setState(() => selectedTime = picked);
                       }
                     },
                     child: _schedulerBox(
                       icon: Icons.access_time,
+                      // text: selectedTime == null
+                      //     ? "Select Time"
+                      //     : selectedTime!.format(context),
                       text: selectedTime == null
                           ? "Select Time"
-                          : selectedTime!.format(context),
+                          : "${selectedTime!.hour.toString().padLeft(2, '0')}:${selectedTime!.minute.toString().padLeft(2, '0')}",
                     ),
                   ),
 
@@ -1901,9 +1918,24 @@ class CustomerDetailV2Page extends StatelessWidget {
                               selectedTime!.minute,
                             );
 
-                            final formatted = DateFormat(
-                                "yyyy-MM-ddTHH:mm:ss")
-                                .format(dateTime);
+                            // final formatted = DateFormat(
+                            //     "yyyy-MM-ddTHH:mm:ss")
+                            //     .format(dateTime);
+
+                            final offset = dateTime.timeZoneOffset;
+                            final sign = offset.isNegative ? '-' : '+';
+
+                            final hours =
+                            offset.inHours.abs().toString().padLeft(2, '0');
+
+                            final minutes =
+                            (offset.inMinutes.abs() % 60)
+                                .toString()
+                                .padLeft(2, '0');
+
+                            final formatted =
+                                "${DateFormat("yyyy-MM-ddTHH:mm:ss").format(dateTime)}"
+                                "$sign$hours:$minutes";
 
                             debugPrint("📤 schedule_at => $formatted");
 
