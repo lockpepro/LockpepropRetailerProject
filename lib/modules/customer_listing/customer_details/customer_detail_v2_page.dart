@@ -280,8 +280,73 @@ class CustomerDetailV2Page extends StatelessWidget {
   //   );
   // }
 
+  // Widget _deviceStatus() {
+  //   final isActive = ctrl.isDeviceActiveByRemove;
+  //
+  //   return Container(
+  //     padding: const EdgeInsets.all(16),
+  //     decoration: _cardDecoration(),
+  //     child: Row(
+  //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //       children: [
+  //         const Text(
+  //           "Device Status",
+  //           style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+  //         ),
+  //         Container(
+  //           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+  //           decoration: BoxDecoration(
+  //             color: isActive ? Colors.green.shade50 : Colors.red.shade50,
+  //             borderRadius: BorderRadius.circular(20),
+  //             border: Border.all(color: isActive ? Colors.green : Colors.red),
+  //           ),
+  //           child: Text(
+  //             isActive ? "● Phone is Active" : "● Phone is Inactive",
+  //             style: TextStyle(
+  //               color: isActive ? Colors.green : Colors.red,
+  //               fontSize: 12,
+  //             ),
+  //           ),
+  //         )
+  //       ],
+  //     ),
+  //   );
+  // }
+
   Widget _deviceStatus() {
-    final isActive = ctrl.isDeviceActiveByRemove;
+    final customer = ctrl.customer.value;
+
+    final bool isLink = customer?.isLink ?? false;
+    final bool isRemoved = customer?.keyActions?.remove ?? false;
+    final bool isLocked =
+        customer?.keyActions?.lockDevice ?? false;
+
+    String statusText = "● Phone is Pending";
+    Color statusColor = Colors.orange;
+
+    /// ✅ REMOVE
+    if (isRemoved) {
+      statusText = "● Phone is Removed";
+      statusColor = Colors.red;
+    }
+
+    /// ✅ LOCK
+    else if (isLocked) {
+      statusText = "● Phone is Locked";
+      statusColor = Colors.deepOrange;
+    }
+
+    /// ✅ ACTIVE
+    else if (isLink && !isRemoved) {
+      statusText = "● Phone is Active";
+      statusColor = Colors.green;
+    }
+
+    /// ✅ PENDING
+    else if (!isLink && !isRemoved) {
+      statusText = "● Phone is Pending";
+      statusColor = Colors.orange;
+    }
 
     return Container(
       padding: const EdgeInsets.all(16),
@@ -291,20 +356,25 @@ class CustomerDetailV2Page extends StatelessWidget {
         children: [
           const Text(
             "Device Status",
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+            ),
           ),
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            padding:
+            const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(
-              color: isActive ? Colors.green.shade50 : Colors.red.shade50,
+              color: statusColor.withOpacity(.08),
               borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: isActive ? Colors.green : Colors.red),
+              border: Border.all(color: statusColor),
             ),
             child: Text(
-              isActive ? "● Phone is Active" : "● Phone is Inactive",
+              statusText,
               style: TextStyle(
-                color: isActive ? Colors.green : Colors.red,
+                color: statusColor,
                 fontSize: 12,
+                fontWeight: FontWeight.w500,
               ),
             ),
           )
@@ -312,6 +382,7 @@ class CustomerDetailV2Page extends StatelessWidget {
       ),
     );
   }
+
   Widget _numberSection() {
     return Container(
       padding: const EdgeInsets.all(16),
@@ -474,14 +545,28 @@ class CustomerDetailV2Page extends StatelessWidget {
               final title = ctrl.orderedCommands[i];
 
               /// 👉 SPECIAL COMMANDS (Location, Mobile No)
+              // if (ctrl.specialCommands.contains(title)) {
+              //   return _actionCard(
+              //     title: title,
+              //     iconPath: ctrl.iconFor(title),
+              //     onTap: () => onSpecialCommandTap(title),
+              //   );
+              // }
+
               if (ctrl.specialCommands.contains(title)) {
                 return _actionCard(
                   title: title,
                   iconPath: ctrl.iconFor(title),
-                  onTap: () => onSpecialCommandTap(title),
+                  onTap: () {
+                    if (title == "Audio") {
+                      showAudioAlertDialog();
+                      return;
+                    }
+
+                    onSpecialCommandTap(title);
+                  },
                 );
               }
-
               /// 👉 NORMAL COMMANDS
               final internalKey =
                   ctrl.displayToInternalCommand[title] ?? title;
@@ -1314,72 +1399,6 @@ class CustomerDetailV2Page extends StatelessWidget {
     );
   }
 
-  // Widget _miniCommandCard({
-  //   required String title,
-  //   required String iconPath,
-  //   required bool value,
-  //   required bool loading,
-  //   required ValueChanged<bool> onChanged,
-  //   required bool isDisabled,
-  //
-  // }) {
-  //   return Opacity(
-  //     opacity: isDisabled ? 0.5 : 1,
-  //     child: Container(
-  //       padding: const EdgeInsets.all(8),
-  //       decoration: BoxDecoration(
-  //         borderRadius: BorderRadius.circular(16),
-  //         border: Border.all(color: const Color(0xff4F6BED)),
-  //         color: Colors.white,
-  //       ),
-  //       child: Column(
-  //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //         mainAxisSize: MainAxisSize.min, // ✅ IMPORTANT
-  //         children: [
-  //
-  //           /// ICON
-  //           SvgPicture.asset(iconPath, height: 20),
-  //
-  //           /// TEXT (FIXED)
-  //           Expanded(
-  //             child: Center(
-  //               child: Text(
-  //                 title,
-  //                 textAlign: TextAlign.center,
-  //                 maxLines: 2,
-  //                 overflow: TextOverflow.ellipsis,
-  //                 style: const TextStyle(fontSize: 10),
-  //               ),
-  //             ),
-  //           ),
-  //           if (isDisabled)
-  //             const Text(
-  //               "Coming Soon",
-  //               style: TextStyle(fontSize: 9, color: Colors.red),
-  //             ),
-  //
-  //           /// SWITCH / LOADER
-  //           loading
-  //               ? const SizedBox(
-  //             height: 14,
-  //             width: 14,
-  //             child: CircularProgressIndicator(strokeWidth: 2),
-  //           )
-  //               : Transform.scale(
-  //             scale: 0.7,
-  //             child: Switch(
-  //               value: value,
-  //               // onChanged: onChanged,
-  //               onChanged: isDisabled ? null : onChanged,
-  //               activeTrackColor: const Color(0xff4F6BED),
-  //             ),
-  //           ),
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
-
   Widget _miniCommandCard({
     required String title,
     required String iconPath,
@@ -1387,95 +1406,161 @@ class CustomerDetailV2Page extends StatelessWidget {
     required bool loading,
     required ValueChanged<bool> onChanged,
     required bool isDisabled,
+
   }) {
     return Opacity(
       opacity: isDisabled ? 0.5 : 1,
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: title == "Audio"
-              ? () => onChanged(true)
-              : null,
-          borderRadius: BorderRadius.circular(18),
-          child: Ink(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(18),
-              color: Colors.white,
-              border: Border.all(color: const Color(0xff4F6BED)),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: 12,
-                horizontal: 8,
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
+      child: Container(
+        padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: const Color(0xff4F6BED)),
+          color: Colors.white,
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisSize: MainAxisSize.min, // ✅ IMPORTANT
+          children: [
 
-                  /// ICON
-                  Container(
-                    height: 42,
-                    width: 42,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.white,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.06),
-                          blurRadius: 6,
-                        )
-                      ],
-                    ),
-                    padding: const EdgeInsets.all(10),
-                    child: SvgPicture.asset(
-                      iconPath,
-                      fit: BoxFit.contain,
-                    ),
-                  ),
+            /// ICON
+            SvgPicture.asset(iconPath, height: 20),
 
-                  const SizedBox(height: 10),
-
-                  /// TITLE
-                  Text(
-                    title,
-                    textAlign: TextAlign.center,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500,
-                      color: Color(0xff1E2A5A),
-                    ),
-                  ),
-
-                  if (title != "Audio") ...[
-                    const SizedBox(height: 10),
-
-                    loading
-                        ? const SizedBox(
-                      height: 14,
-                      width: 14,
-                      child: CircularProgressIndicator(strokeWidth: 2),
-                    )
-                        : Transform.scale(
-                      scale: 0.7,
-                      child: Switch(
-                        value: value,
-                        onChanged:
-                        isDisabled ? null : onChanged,
-                        activeTrackColor:
-                        const Color(0xff4F6BED),
-                      ),
-                    ),
-                  ],
-                ],
+            /// TEXT (FIXED)
+            Expanded(
+              child: Center(
+                child: Text(
+                  title,
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(fontSize: 10),
+                ),
               ),
             ),
-          ),
+            if (isDisabled)
+              const Text(
+                "Coming Soon",
+                style: TextStyle(fontSize: 9, color: Colors.red),
+              ),
+
+            /// SWITCH / LOADER
+            loading
+                ? const SizedBox(
+              height: 14,
+              width: 14,
+              child: CircularProgressIndicator(strokeWidth: 2),
+            )
+                : Transform.scale(
+              scale: 0.7,
+              child: Switch(
+                value: value,
+                // onChanged: onChanged,
+                onChanged: isDisabled ? null : onChanged,
+                activeTrackColor: const Color(0xff4F6BED),
+              ),
+            ),
+          ],
         ),
       ),
     );
   }
+
+  // Widget _miniCommandCard({
+  //   required String title,
+  //   required String iconPath,
+  //   required bool value,
+  //   required bool loading,
+  //   required ValueChanged<bool> onChanged,
+  //   required bool isDisabled,
+  // }) {
+  //   return Opacity(
+  //     opacity: isDisabled ? 0.5 : 1,
+  //     child: Material(
+  //       color: Colors.transparent,
+  //       child: InkWell(
+  //         onTap: title == "Audio"
+  //             ? () => onChanged(true)
+  //             : null,
+  //         borderRadius: BorderRadius.circular(18),
+  //         child: Ink(
+  //           decoration: BoxDecoration(
+  //             borderRadius: BorderRadius.circular(18),
+  //             color: Colors.white,
+  //             border: Border.all(color: const Color(0xff4F6BED)),
+  //           ),
+  //           child: Padding(
+  //             padding: const EdgeInsets.symmetric(
+  //               vertical: 12,
+  //               horizontal: 8,
+  //             ),
+  //             child: Column(
+  //               mainAxisAlignment: MainAxisAlignment.center,
+  //               children: [
+  //
+  //                 /// ICON
+  //                 Container(
+  //                   height: 42,
+  //                   width: 42,
+  //                   decoration: BoxDecoration(
+  //                     shape: BoxShape.circle,
+  //                     color: Colors.white,
+  //                     boxShadow: [
+  //                       BoxShadow(
+  //                         color: Colors.black.withOpacity(0.06),
+  //                         blurRadius: 6,
+  //                       )
+  //                     ],
+  //                   ),
+  //                   padding: const EdgeInsets.all(10),
+  //                   child: SvgPicture.asset(
+  //                     iconPath,
+  //                     fit: BoxFit.contain,
+  //                   ),
+  //                 ),
+  //
+  //                 const SizedBox(height: 10),
+  //
+  //                 /// TITLE
+  //                 Text(
+  //                   title,
+  //                   textAlign: TextAlign.center,
+  //                   maxLines: 2,
+  //                   overflow: TextOverflow.ellipsis,
+  //                   style: const TextStyle(
+  //                     fontSize: 12,
+  //                     fontWeight: FontWeight.w500,
+  //                     color: Color(0xff1E2A5A),
+  //                   ),
+  //                 ),
+  //
+  //                 if (title != "Audio") ...[
+  //                   const SizedBox(height: 10),
+  //
+  //                   loading
+  //                       ? const SizedBox(
+  //                     height: 14,
+  //                     width: 14,
+  //                     child: CircularProgressIndicator(strokeWidth: 2),
+  //                   )
+  //                       : Transform.scale(
+  //                     scale: 0.7,
+  //                     child: Switch(
+  //                       value: value,
+  //                       onChanged:
+  //                       isDisabled ? null : onChanged,
+  //                       activeTrackColor:
+  //                       const Color(0xff4F6BED),
+  //                     ),
+  //                   ),
+  //                 ],
+  //               ],
+  //             ),
+  //           ),
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 
   Widget _actionCard({
     required String title,

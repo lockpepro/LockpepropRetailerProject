@@ -460,6 +460,20 @@ class LoginController extends GetxController {
     }
   }
 
+  void changeEmail() {
+
+    isOtpSent.value = false;
+
+    isOtpVerified.value = false;
+
+    otp.clear();
+
+    otpValue.value = '';
+
+    otpSeconds.value = 60;
+
+    otpTimer?.cancel();
+  }
   // void login() async {
   //   print("========== LOGIN START ==========");
   //
@@ -917,19 +931,117 @@ class LoginController extends GetxController {
   // }
 
   /// SEND OTP
+  // Future<void> sendOtp() async {
+  //
+  //   final phone = mobile.text.trim();
+  //
+  //
+  //   if (phone.length != 10) {
+  //
+  //     AppSnack.error("Enter valid mobile number");
+  //
+  //     return;
+  //   }
+  //   if (!isChecked.value) {
+  //     AppSnack.error("Accept Terms & Conditions");
+  //     return;
+  //   }
+  //
+  //   try {
+  //
+  //     isLoading.value = true;
+  //
+  //     print("📲 SEND OTP => $phone");
+  //
+  //     final response = await ApiClient.dio.post(
+  //       "/api/v1/auth/login",
+  //       data: {
+  //         "phone": phone,
+  //       },
+  //     );
+  //
+  //     print("✅ SEND OTP RESPONSE => ${response.data}");
+  //
+  //     final data = response.data;
+  //
+  //     final message =
+  //     data["message"]
+  //         ?.toString()
+  //         .trim();
+  //
+  //     /// REGISTERED USER
+  //     if (data["success"] == true &&
+  //         message ==
+  //             "OTP successfully bheja gaya.") {
+  //
+  //       isOtpSent.value = true;
+  //
+  //       startOtpTimer();
+  //
+  //       AppSnack.success(message ??'OTP Send successfully');
+  //
+  //       return;
+  //     }
+  //
+  //     /// NOT REGISTERED
+  //     if (message ==
+  //         "Agar number registered hai toh OTP bhej diya gaya hai.") {
+  //
+  //       AppSnack.error(
+  //         "Number not registered. Please contact admin.",
+  //       );
+  //
+  //       return;
+  //     }
+  //
+  //     AppSnack.error(
+  //       message ?? "Failed to send OTP",
+  //     );
+  //
+  //   } catch (e) {
+  //
+  //     print("❌ SEND OTP ERROR => $e");
+  //
+  //     AppSnack.error(
+  //       "Failed to send OTP",
+  //     );
+  //
+  //   } finally {
+  //
+  //     isLoading.value = false;
+  //   }
+  // }
+  /// SEND OTP
   Future<void> sendOtp() async {
 
     final phone = mobile.text.trim();
+    final emailText = email.text.trim();
 
+    /// EMAIL LOGIN
+    final isEmail = selectedLoginType.value == 0;
 
-    if (phone.length != 10) {
+    /// MOBILE LOGIN
+    final isMobile = selectedLoginType.value == 1;
+
+    /// VALIDATION
+    if (isMobile && phone.length != 10) {
 
       AppSnack.error("Enter valid mobile number");
 
       return;
     }
+
+    if (isEmail && emailText.isEmpty) {
+
+      AppSnack.error("Enter valid email");
+
+      return;
+    }
+
     if (!isChecked.value) {
+
       AppSnack.error("Accept Terms & Conditions");
+
       return;
     }
 
@@ -937,13 +1049,26 @@ class LoginController extends GetxController {
 
       isLoading.value = true;
 
-      print("📲 SEND OTP => $phone");
+      print("📲 SEND OTP");
+
+      final Map<String, dynamic> body = {};
+
+      /// EMAIL
+      if (isEmail) {
+
+        body["email"] = emailText;
+
+      }
+
+      /// MOBILE
+      else {
+
+        body["phone"] = phone;
+      }
 
       final response = await ApiClient.dio.post(
         "/api/v1/auth/login",
-        data: {
-          "phone": phone,
-        },
+        data: body,
       );
 
       print("✅ SEND OTP RESPONSE => ${response.data}");
@@ -955,16 +1080,16 @@ class LoginController extends GetxController {
           ?.toString()
           .trim();
 
-      /// REGISTERED USER
-      if (data["success"] == true &&
-          message ==
-              "OTP successfully bheja gaya.") {
+      /// SUCCESS
+      if (data["success"] == true) {
 
         isOtpSent.value = true;
 
         startOtpTimer();
 
-        AppSnack.success(message ??'OTP Send successfully');
+        AppSnack.success(
+          message ?? "OTP sent successfully",
+        );
 
         return;
       }
@@ -1050,18 +1175,364 @@ class LoginController extends GetxController {
   // }
 
   /// VERIFY OTP
+  // Future<void> verifyOtp() async {
+  //
+  //   final phone = mobile.text.trim();
+  //
+  //   if (otpValue.value.length != 6) {
+  //
+  //     AppSnack.error("Enter valid 6 digit OTP");
+  //
+  //     return;
+  //   }
+  //   if (!isChecked.value) {
+  //     AppSnack.error("Accept Terms & Conditions");
+  //     return;
+  //   }
+  //
+  //   try {
+  //
+  //     isLoading.value = true;
+  //
+  //     print("🔐 VERIFY OTP => ${otpValue.value}");
+  //
+  //     final response = await ApiClient.dio.post(
+  //       "/api/v1/auth/login",
+  //       data: {
+  //         "phone": phone,
+  //         "otp": otpValue.value,
+  //       },
+  //     );
+  //
+  //     print("✅ VERIFY OTP RESPONSE => ${response.data}");
+  //
+  //     final data = response.data;
+  //
+  //     /// INVALID OTP
+  //     if (data["success"] != true) {
+  //
+  //       AppSnack.error(
+  //         data["message"] ?? "Invalid OTP",
+  //       );
+  //
+  //       isOtpVerified.value = false;
+  //
+  //       return;
+  //     }
+  //
+  //     /// SUCCESS
+  //     isOtpVerified.value = true;
+  //
+  //     AppSnack.success(
+  //       data["message"] ?? "OTP verified successfully",
+  //     );
+  //
+  //     /// =========================
+  //     /// SAVE TOKEN
+  //     /// =========================
+  //
+  //     final token = data["data"]?["token"];
+  //
+  //     if (token != null && token.toString().isNotEmpty) {
+  //
+  //       await _box.write("token", token);
+  //
+  //       ApiClient.attachToken();
+  //     }
+  //
+  //     /// SAVE USER DATA
+  //     await _box.write(
+  //       "userData",
+  //       data["data"],
+  //     );
+  //
+  //     await _box.write(
+  //       "userId",
+  //       data["data"]?["id"],
+  //     );
+  //
+  //     /// =========================
+  //     /// ROLE HANDLE
+  //     /// =========================
+  //
+  //     final backendRole =
+  //     (data["user"]?["role"] ?? "")
+  //         .toString()
+  //         .toLowerCase();
+  //
+  //     final backendUserType =
+  //     (data["user"]?["userType"] ?? "")
+  //         .toString()
+  //         .toLowerCase();
+  //
+  //     print("🔵 BACKEND ROLE => $backendRole");
+  //
+  //     print("🔵 BACKEND USER TYPE => $backendUserType");
+  //
+  //     final isAdmin =
+  //         backendUserType == "admin" ||
+  //             backendRole == "admin" ||
+  //             backendRole == "super_admin";
+  //
+  //     if (isAdmin) {
+  //
+  //       AppSnack.success(
+  //         "Logged in as Admin",
+  //       );
+  //
+  //       return;
+  //     }
+  //
+  //     String finalRole = role;
+  //
+  //     if (backendRole.contains("vendor") ||
+  //         backendUserType == "retailer") {
+  //
+  //       finalRole = "retailer";
+  //
+  //     } else if (backendRole.contains("distributor") ||
+  //         backendUserType == "distributor") {
+  //
+  //       finalRole = "distributor";
+  //     }
+  //
+  //     await _box.write(
+  //       "role",
+  //       finalRole,
+  //     );
+  //
+  //     /// =========================
+  //     /// REDIRECT
+  //     /// =========================
+  //
+  //     Future.delayed(
+  //       const Duration(milliseconds: 400),
+  //           () {
+  //
+  //         if (finalRole == "retailer") {
+  //
+  //           Get.offAllNamed(
+  //             AppRoutes.DASH_RETAILER,
+  //           );
+  //
+  //         } else {
+  //
+  //           Get.offAllNamed(
+  //             AppRoutes.DASH_DISTRIBUTOR,
+  //           );
+  //         }
+  //       },
+  //     );
+  //
+  //   } catch (e) {
+  //
+  //     print("❌ VERIFY OTP ERROR => $e");
+  //
+  //     AppSnack.error(
+  //       "Invalid OTP",
+  //     );
+  //
+  //     isOtpVerified.value = false;
+  //
+  //   } finally {
+  //
+  //     isLoading.value = false;
+  //   }
+  // }
+  /// VERIFY OTP
+  // Future<void> verifyOtp() async {
+  //
+  //   final phone = mobile.text.trim();
+  //   final emailText = email.text.trim();
+  //
+  //   final isEmail = selectedLoginType.value == 0;
+  //
+  //   if (otpValue.value.length != 6) {
+  //
+  //     AppSnack.error("Enter valid 6 digit OTP");
+  //
+  //     return;
+  //   }
+  //
+  //   if (!isChecked.value) {
+  //
+  //     AppSnack.error("Accept Terms & Conditions");
+  //
+  //     return;
+  //   }
+  //
+  //   try {
+  //
+  //     isLoading.value = true;
+  //
+  //     print("🔐 VERIFY OTP => ${otpValue.value}");
+  //
+  //     final Map<String, dynamic> body = {
+  //       "otp": otpValue.value,
+  //     };
+  //
+  //     /// EMAIL
+  //     if (isEmail) {
+  //
+  //       body["email"] = emailText;
+  //
+  //     }
+  //
+  //     /// MOBILE
+  //     else {
+  //
+  //       body["phone"] = phone;
+  //     }
+  //
+  //     final response = await ApiClient.dio.post(
+  //       "/api/v1/auth/login",
+  //       data: body,
+  //     );
+  //
+  //     print("✅ VERIFY OTP RESPONSE => ${response.data}");
+  //
+  //     final data = response.data;
+  //
+  //     /// INVALID OTP
+  //     if (data["success"] != true) {
+  //
+  //       AppSnack.error(
+  //         data["message"] ?? "Invalid OTP",
+  //       );
+  //
+  //       isOtpVerified.value = false;
+  //
+  //       return;
+  //     }
+  //
+  //     /// SUCCESS
+  //     isOtpVerified.value = true;
+  //
+  //     AppSnack.success(
+  //       data["message"] ?? "OTP verified successfully",
+  //     );
+  //
+  //     /// SAVE TOKEN
+  //     final token = data["token"];
+  //
+  //     if (token != null &&
+  //         token.toString().isNotEmpty) {
+  //
+  //       await _box.write(
+  //         "token",
+  //         token,
+  //       );
+  //
+  //       ApiClient.attachToken();
+  //     }
+  //
+  //     /// SAVE USER
+  //     await _box.write(
+  //       "user",
+  //       data["user"],
+  //     );
+  //
+  //     final user = data["user"];
+  //
+  //     final backendRole =
+  //     (user?["role"] ?? "")
+  //         .toString()
+  //         .toLowerCase();
+  //
+  //     final backendUserType =
+  //     (user?["userType"] ?? "")
+  //         .toString()
+  //         .toLowerCase();
+  //
+  //     /// ADMIN
+  //     final isAdmin =
+  //         backendUserType == "admin" ||
+  //             backendRole == "admin" ||
+  //             backendRole == "super_admin";
+  //
+  //     if (isAdmin) {
+  //
+  //       AppSnack.success(
+  //         "Logged in as Admin",
+  //       );
+  //
+  //       return;
+  //     }
+  //
+  //     /// ROLE
+  //     String finalRole = role;
+  //
+  //     if (backendRole.contains("vendor") ||
+  //         backendUserType == "retailer") {
+  //
+  //       finalRole = "retailer";
+  //
+  //     } else if (backendRole.contains("distributor") ||
+  //         backendUserType == "distributor") {
+  //
+  //       finalRole = "distributor";
+  //     }
+  //
+  //     await _box.write(
+  //       "role",
+  //       finalRole,
+  //     );
+  //
+  //     /// REDIRECT
+  //     Future.delayed(
+  //       const Duration(milliseconds: 300),
+  //           () {
+  //
+  //         if (finalRole == "retailer") {
+  //
+  //           Get.offAllNamed(
+  //             AppRoutes.DASH_RETAILER,
+  //           );
+  //
+  //         } else {
+  //
+  //           Get.offAllNamed(
+  //             AppRoutes.DASH_DISTRIBUTOR,
+  //           );
+  //         }
+  //       },
+  //     );
+  //
+  //   } catch (e) {
+  //
+  //     print("❌ VERIFY OTP ERROR => $e");
+  //
+  //     AppSnack.error(
+  //       "Invalid OTP",
+  //     );
+  //
+  //     isOtpVerified.value = false;
+  //
+  //   } finally {
+  //
+  //     isLoading.value = false;
+  //   }
+  // }
+  /// VERIFY OTP
   Future<void> verifyOtp() async {
 
     final phone = mobile.text.trim();
+    final emailText = email.text.trim();
 
-    if (otpValue.value.length != 6) {
+    final isEmail = selectedLoginType.value == 0;
+
+    /// VALIDATION
+    if (otp.text.trim().length != 6) {
 
       AppSnack.error("Enter valid 6 digit OTP");
 
       return;
     }
+
     if (!isChecked.value) {
+
       AppSnack.error("Accept Terms & Conditions");
+
       return;
     }
 
@@ -1069,14 +1540,35 @@ class LoginController extends GetxController {
 
       isLoading.value = true;
 
-      print("🔐 VERIFY OTP => ${otpValue.value}");
+      print("📧 EMAIL => $emailText");
+      print("📱 PHONE => $phone");
+      print("🔐 OTP => ${otp.text.trim()}");
+      print("📦 LOGIN TYPE => ${selectedLoginType.value}");
+
+      final Map<String, dynamic> body = {
+
+        /// ✅ IMPORTANT FIX
+        "otp": otp.text.trim(),
+      };
+
+      /// EMAIL LOGIN
+      if (isEmail) {
+
+        body["email"] = emailText;
+
+      }
+
+      /// MOBILE LOGIN
+      else {
+
+        body["phone"] = phone;
+      }
+
+      print("📤 VERIFY BODY => $body");
 
       final response = await ApiClient.dio.post(
         "/api/v1/auth/login",
-        data: {
-          "phone": phone,
-          "otp": otpValue.value,
-        },
+        data: body,
       );
 
       print("✅ VERIFY OTP RESPONSE => ${response.data}");
@@ -1099,31 +1591,46 @@ class LoginController extends GetxController {
       isOtpVerified.value = true;
 
       AppSnack.success(
-        data["message"] ?? "OTP verified successfully",
+        data["message"] ??
+            "OTP verified successfully",
       );
 
       /// =========================
       /// SAVE TOKEN
       /// =========================
 
-      final token = data["data"]?["token"];
+      final token = data["token"];
 
-      if (token != null && token.toString().isNotEmpty) {
+      if (token != null &&
+          token.toString().isNotEmpty) {
 
-        await _box.write("token", token);
+        await _box.write(
+          "token",
+          token,
+        );
 
         ApiClient.attachToken();
       }
 
-      /// SAVE USER DATA
+      /// =========================
+      /// SAVE USER
+      /// =========================
+
+      final user = data["user"];
+
+      await _box.write(
+        "user",
+        user,
+      );
+
       await _box.write(
         "userData",
-        data["data"],
+        user,
       );
 
       await _box.write(
         "userId",
-        data["data"]?["id"],
+        user?["_id"] ?? user?["id"],
       );
 
       /// =========================
@@ -1131,12 +1638,12 @@ class LoginController extends GetxController {
       /// =========================
 
       final backendRole =
-      (data["user"]?["role"] ?? "")
+      (user?["role"] ?? "")
           .toString()
           .toLowerCase();
 
       final backendUserType =
-      (data["user"]?["userType"] ?? "")
+      (user?["userType"] ?? "")
           .toString()
           .toLowerCase();
 
@@ -1144,6 +1651,7 @@ class LoginController extends GetxController {
 
       print("🔵 BACKEND USER TYPE => $backendUserType");
 
+      /// ADMIN
       final isAdmin =
           backendUserType == "admin" ||
               backendRole == "admin" ||
@@ -1158,6 +1666,7 @@ class LoginController extends GetxController {
         return;
       }
 
+      /// FINAL ROLE
       String finalRole = role;
 
       if (backendRole.contains("vendor") ||
@@ -1171,6 +1680,8 @@ class LoginController extends GetxController {
         finalRole = "distributor";
       }
 
+      print("🟢 FINAL ROLE => $finalRole");
+
       await _box.write(
         "role",
         finalRole,
@@ -1181,7 +1692,7 @@ class LoginController extends GetxController {
       /// =========================
 
       Future.delayed(
-        const Duration(milliseconds: 400),
+        const Duration(milliseconds: 300),
             () {
 
           if (finalRole == "retailer") {
@@ -1204,7 +1715,7 @@ class LoginController extends GetxController {
       print("❌ VERIFY OTP ERROR => $e");
 
       AppSnack.error(
-        "Invalid OTP",
+        "Invalid OTP. Dobara check karein.",
       );
 
       isOtpVerified.value = false;
@@ -1238,6 +1749,17 @@ class LoginController extends GetxController {
   }
 
   /// CHANGE NUMBER
+  // void changeNumber() {
+  //
+  //   isOtpSent.value = false;
+  //
+  //   isOtpVerified.value = false;
+  //
+  //   otp.clear();
+  //
+  //   otpValue.value = '';
+  // }
+
   void changeNumber() {
 
     isOtpSent.value = false;
@@ -1247,8 +1769,11 @@ class LoginController extends GetxController {
     otp.clear();
 
     otpValue.value = '';
-  }
 
+    otpSeconds.value = 60;
+
+    otpTimer?.cancel();
+  }
   /// OTP LOGIN
   void loginWithOtp() {
 

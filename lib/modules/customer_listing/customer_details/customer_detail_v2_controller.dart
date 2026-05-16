@@ -216,6 +216,16 @@
       try {
         final resp = await _service.getCustomerById(customerId: id);
         customer.value = resp;
+        /// ✅ SYNC COMMAND STATES FROM API
+        commands["ACTIVE_RESTRICTION"]?.value =
+            resp?.keyActions?.restriction ?? false;
+
+        commands["Lock Device"]?.value =
+            resp?.keyActions?.lockDevice ?? false;
+
+        commands["Social Media"]?.value =
+            resp?.keyActions?.socialMediaLock ?? false;
+
         _buildEmiRows();
 
         debugPrint("✅ Customer detail loaded");
@@ -445,6 +455,7 @@
 
       "Scheduler Lock",
       "App Update",
+      "Audio", // ✅ ADD THIS
 
 
     ];

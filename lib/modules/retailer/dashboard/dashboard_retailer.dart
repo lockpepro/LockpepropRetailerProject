@@ -4652,7 +4652,7 @@ class _RetailerDashboardState extends State<RetailerDashboard> {
                     Text(
                       valueRx.value.toString(),
                       style: const TextStyle(
-                        fontSize: 16,
+                        fontSize: 13,
                         fontWeight: FontWeight.bold,
                         color: Colors.black,
                       ),
