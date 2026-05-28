@@ -1173,139 +1173,139 @@ class LoginScreen extends GetView<LoginController> {
                       /// PREMIUM TOGGLE MOBILE OTP COMMENT FOR NOW
                       /// =========================
 
-                      // Obx(
-                      //       () => Container(
-                      //     height: 52,
-                      //     padding:
-                      //     const EdgeInsets.all(4),
-                      //     decoration: BoxDecoration(
-                      //       color:
-                      //       Colors.grey.shade100,
-                      //       borderRadius:
-                      //       BorderRadius.circular(
-                      //         40,
-                      //       ),
-                      //     ),
-                      //     child: Row(
-                      //       children: [
-                      //
-                      //         /// EMAIL
-                      //         Expanded(
-                      //           child:
-                      //           GestureDetector(
-                      //             onTap: () {
-                      //               controller
-                      //                   .switchLoginType(
-                      //                 0,
-                      //               );
-                      //             },
-                      //             child:
-                      //             AnimatedContainer(
-                      //               duration:
-                      //               const Duration(
-                      //                 milliseconds:
-                      //                 250,
-                      //               ),
-                      //               alignment:
-                      //               Alignment
-                      //                   .center,
-                      //               decoration:
-                      //               BoxDecoration(
-                      //                 color: controller
-                      //                     .selectedLoginType
-                      //                     .value ==
-                      //                     0
-                      //                     ? AppColors
-                      //                     .primaryDark
-                      //                     : Colors
-                      //                     .transparent,
-                      //                 borderRadius:
-                      //                 BorderRadius
-                      //                     .circular(
-                      //                   40,
-                      //                 ),
-                      //               ),
-                      //               child: Text(
-                      //                 "Email",
-                      //                 style:
-                      //                 TextStyle(
-                      //                   color: controller
-                      //                       .selectedLoginType
-                      //                       .value ==
-                      //                       0
-                      //                       ? Colors
-                      //                       .white
-                      //                       : Colors
-                      //                       .black,
-                      //                   fontWeight:
-                      //                   FontWeight
-                      //                       .w600,
-                      //                 ),
-                      //               ),
-                      //             ),
-                      //           ),
-                      //         ),
-                      //
-                      //         /// MOBILE
-                      //         Expanded(
-                      //           child:
-                      //           GestureDetector(
-                      //             onTap: () {
-                      //               controller
-                      //                   .switchLoginType(
-                      //                 1,
-                      //               );
-                      //             },
-                      //             child:
-                      //             AnimatedContainer(
-                      //               duration:
-                      //               const Duration(
-                      //                 milliseconds:
-                      //                 250,
-                      //               ),
-                      //               alignment:
-                      //               Alignment
-                      //                   .center,
-                      //               decoration:
-                      //               BoxDecoration(
-                      //                 color: controller
-                      //                     .selectedLoginType
-                      //                     .value ==
-                      //                     1
-                      //                     ? AppColors
-                      //                     .primaryDark
-                      //                     : Colors
-                      //                     .transparent,
-                      //                 borderRadius:
-                      //                 BorderRadius
-                      //                     .circular(
-                      //                   40,
-                      //                 ),
-                      //               ),
-                      //               child: Text(
-                      //                 "Mobile OTP",
-                      //                 style:
-                      //                 TextStyle(
-                      //                   color: controller
-                      //                       .selectedLoginType
-                      //                       .value ==
-                      //                       1
-                      //                       ? Colors
-                      //                       .white
-                      //                       : Colors
-                      //                       .black,
-                      //                   fontWeight:
-                      //                   FontWeight
-                      //                       .w600,
-                      //                 ),
-                      //               ),
-                      //             ),
-                      //           ),
-                      //         ),
-                      //       ],
-                      //     ),
-                      //   ),
-                      // ),
+                      Obx(
+                            () => Container(
+                          height: 52,
+                          padding:
+                          const EdgeInsets.all(4),
+                          decoration: BoxDecoration(
+                            color:
+                            Colors.grey.shade100,
+                            borderRadius:
+                            BorderRadius.circular(
+                              40,
+                            ),
+                          ),
+                          child: Row(
+                            children: [
+
+                              /// EMAIL
+                              Expanded(
+                                child:
+                                GestureDetector(
+                                  onTap: () {
+                                    controller
+                                        .switchLoginType(
+                                      0,
+                                    );
+                                  },
+                                  child:
+                                  AnimatedContainer(
+                                    duration:
+                                    const Duration(
+                                      milliseconds:
+                                      250,
+                                    ),
+                                    alignment:
+                                    Alignment
+                                        .center,
+                                    decoration:
+                                    BoxDecoration(
+                                      color: controller
+                                          .selectedLoginType
+                                          .value ==
+                                          0
+                                          ? AppColors
+                                          .primaryDark
+                                          : Colors
+                                          .transparent,
+                                      borderRadius:
+                                      BorderRadius
+                                          .circular(
+                                        40,
+                                      ),
+                                    ),
+                                    child: Text(
+                                      "Email",
+                                      style:
+                                      TextStyle(
+                                        color: controller
+                                            .selectedLoginType
+                                            .value ==
+                                            0
+                                            ? Colors
+                                            .white
+                                            : Colors
+                                            .black,
+                                        fontWeight:
+                                        FontWeight
+                                            .w600,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+
+                              /// MOBILE
+                              Expanded(
+                                child:
+                                GestureDetector(
+                                  onTap: () {
+                                    controller
+                                        .switchLoginType(
+                                      1,
+                                    );
+                                  },
+                                  child:
+                                  AnimatedContainer(
+                                    duration:
+                                    const Duration(
+                                      milliseconds:
+                                      250,
+                                    ),
+                                    alignment:
+                                    Alignment
+                                        .center,
+                                    decoration:
+                                    BoxDecoration(
+                                      color: controller
+                                          .selectedLoginType
+                                          .value ==
+                                          1
+                                          ? AppColors
+                                          .primaryDark
+                                          : Colors
+                                          .transparent,
+                                      borderRadius:
+                                      BorderRadius
+                                          .circular(
+                                        40,
+                                      ),
+                                    ),
+                                    child: Text(
+                                      "Mobile OTP",
+                                      style:
+                                      TextStyle(
+                                        color: controller
+                                            .selectedLoginType
+                                            .value ==
+                                            1
+                                            ? Colors
+                                            .white
+                                            : Colors
+                                            .black,
+                                        fontWeight:
+                                        FontWeight
+                                            .w600,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
 
                       const SizedBox(height: 25),
 
@@ -1419,6 +1419,197 @@ class LoginScreen extends GetView<LoginController> {
                       //   )
                       //       : const SizedBox(),
                       // ),
+
+                      // /// =========================
+                      // /// EMAIL FLOW
+                      // /// =========================
+                      //
+                      // Obx(
+                      //       () => controller.isEmailLogin.value
+                      //       ? Column(
+                      //     children: [
+                      //
+                      //       /// EMAIL FIELD
+                      //       if (!controller.isOtpSent.value) ...[
+                      //
+                      //         inputField(
+                      //           controller.email,
+                      //           "Email Address",
+                      //           Icons.email_outlined,
+                      //           keyboardType:
+                      //           TextInputType.emailAddress,
+                      //         ),
+                      //
+                      //         const SizedBox(
+                      //           height: 22,
+                      //         ),
+                      //
+                      //         mainButton(
+                      //           title: "Send OTP",
+                      //           loading:
+                      //           controller.isLoading.value,
+                      //           onTap: controller
+                      //               .isLoading.value
+                      //               ? null
+                      //               : controller.sendOtp,
+                      //         ),
+                      //       ],
+                      //
+                      //       /// OTP SCREEN
+                      //       if (controller.isOtpSent.value) ...[
+                      //
+                      //         Row(
+                      //           children: [
+                      //
+                      //             Expanded(
+                      //               child: RichText(
+                      //                 text: TextSpan(
+                      //                   style: const TextStyle(
+                      //                     color: Colors.black,
+                      //                     fontSize: 15,
+                      //                   ),
+                      //                   children: [
+                      //
+                      //                     const TextSpan(
+                      //                       text: "OTP sent to ",
+                      //                     ),
+                      //
+                      //                     TextSpan(
+                      //                       text:
+                      //                       controller.email.text,
+                      //                       style:
+                      //                       const TextStyle(
+                      //                         fontWeight:
+                      //                         FontWeight.bold,
+                      //                       ),
+                      //                     ),
+                      //                   ],
+                      //                 ),
+                      //               ),
+                      //             ),
+                      //
+                      //             TextButton(
+                      //               onPressed:
+                      //               controller.changeEmail,
+                      //               child: const Text(
+                      //                 "Change",
+                      //               ),
+                      //             ),
+                      //           ],
+                      //         ),
+                      //
+                      //         const SizedBox(height: 20),
+                      //
+                      //         /// OTP BOXES
+                      //         PinCodeTextField(
+                      //           appContext: context,
+                      //           length: 6,
+                      //           keyboardType:
+                      //           TextInputType.number,
+                      //           animationType:
+                      //           AnimationType.fade,
+                      //           enableActiveFill: true,
+                      //           cursorColor:
+                      //           AppColors.primaryDark,
+                      //           inputFormatters: [
+                      //             FilteringTextInputFormatter
+                      //                 .digitsOnly,
+                      //           ],
+                      //           onChanged: (value) {
+                      //
+                      //             controller.otpValue.value =
+                      //                 value;
+                      //
+                      //             controller.otp.text =
+                      //                 value;
+                      //           },
+                      //           pinTheme: PinTheme(
+                      //             shape:
+                      //             PinCodeFieldShape.box,
+                      //             borderRadius:
+                      //             BorderRadius.circular(
+                      //               16,
+                      //             ),
+                      //             fieldHeight: 54,
+                      //             fieldWidth: 48,
+                      //             activeColor:
+                      //             AppColors.primaryDark,
+                      //             selectedColor:
+                      //             AppColors.primaryDark,
+                      //             inactiveColor:
+                      //             Colors.grey.shade300,
+                      //             activeFillColor:
+                      //             Colors.white,
+                      //             selectedFillColor:
+                      //             Colors.white,
+                      //             inactiveFillColor:
+                      //             Colors.white,
+                      //           ),
+                      //         ),
+                      //
+                      //         const SizedBox(height: 8),
+                      //
+                      //         /// TIMER
+                      //         Obx(
+                      //               () => controller
+                      //               .otpSeconds.value ==
+                      //               0
+                      //               ? TextButton(
+                      //             onPressed:
+                      //             controller.sendOtp,
+                      //             child: const Text(
+                      //               "Resend OTP",
+                      //             ),
+                      //           )
+                      //               : Text(
+                      //             "Resend OTP in 00:${controller.otpSeconds.value.toString().padLeft(2, '0')}",
+                      //             style: TextStyle(
+                      //               color: Colors
+                      //                   .grey.shade600,
+                      //             ),
+                      //           ),
+                      //         ),
+                      //
+                      //         const SizedBox(height: 18),
+                      //
+                      //         /// VERIFY BUTTON
+                      //         mainButton(
+                      //           title: controller
+                      //               .isOtpVerified.value
+                      //               ? "OTP Verified ✓"
+                      //               : "Verify OTP",
+                      //           backgroundColor:
+                      //           controller.otpValue.value
+                      //               .length ==
+                      //               6
+                      //               ? Colors.green
+                      //               : Colors.grey,
+                      //           onTap: controller
+                      //               .otpValue.value.length ==
+                      //               6
+                      //               ? controller.verifyOtp
+                      //               : null,
+                      //         ),
+                      //
+                      //         /// CONTINUE BUTTON
+                      //         if (controller
+                      //             .isOtpVerified.value) ...[
+                      //
+                      //           const SizedBox(
+                      //             height: 15,
+                      //           ),
+                      //
+                      //           mainButton(
+                      //             title: "Continue",
+                      //             onTap:
+                      //             controller.loginWithOtp,
+                      //           ),
+                      //         ],
+                      //       ],
+                      //     ],
+                      //   )
+                      //       : const SizedBox(),
+                      // ),
                       /// =========================
                       /// EMAIL FLOW
                       /// =========================
@@ -1428,181 +1619,469 @@ class LoginScreen extends GetView<LoginController> {
                             ? Column(
                           children: [
 
-                            /// EMAIL FIELD
-                            if (!controller.isOtpSent.value) ...[
+                            /// =========================
+                            /// EMAIL LOGIN TYPE TOGGLE
+                            /// =========================
+
+                            // Container(
+                            //   height: 52,
+                            //   padding: const EdgeInsets.all(4),
+                            //   decoration: BoxDecoration(
+                            //     color: Colors.grey.shade100,
+                            //     borderRadius: BorderRadius.circular(40),
+                            //   ),
+                            //   child: Row(
+                            //     children: [
+                            //
+                            //       /// OTP LOGIN
+                            //       Expanded(
+                            //         child: GestureDetector(
+                            //           onTap: () {
+                            //             controller.switchEmailAuthType(0);
+                            //           },
+                            //           child: AnimatedContainer(
+                            //             duration: const Duration(milliseconds: 250),
+                            //             alignment: Alignment.center,
+                            //             decoration: BoxDecoration(
+                            //               color:
+                            //               controller.selectedEmailAuthType.value == 0
+                            //                   ? AppColors.primaryDark
+                            //                   : Colors.transparent,
+                            //               borderRadius: BorderRadius.circular(40),
+                            //             ),
+                            //             child: Text(
+                            //               "Login with OTP",
+                            //               style: TextStyle(
+                            //                 color:
+                            //                 controller.selectedEmailAuthType.value == 0
+                            //                     ? Colors.white
+                            //                     : Colors.black,
+                            //                 fontWeight: FontWeight.w600,
+                            //               ),
+                            //             ),
+                            //           ),
+                            //         ),
+                            //       ),
+                            //
+                            //       /// PASSWORD LOGIN
+                            //       Expanded(
+                            //         child: GestureDetector(
+                            //           onTap: () {
+                            //             controller.switchEmailAuthType(1);
+                            //           },
+                            //           child: AnimatedContainer(
+                            //             duration: const Duration(milliseconds: 250),
+                            //             alignment: Alignment.center,
+                            //             decoration: BoxDecoration(
+                            //               color:
+                            //               controller.selectedEmailAuthType.value == 1
+                            //                   ? AppColors.primaryDark
+                            //                   : Colors.transparent,
+                            //               borderRadius: BorderRadius.circular(40),
+                            //             ),
+                            //             child: Text(
+                            //               "Login with Password",
+                            //               style: TextStyle(
+                            //                 color:
+                            //                 controller.selectedEmailAuthType.value == 1
+                            //                     ? Colors.white
+                            //                     : Colors.black,
+                            //                 fontWeight: FontWeight.w600,
+                            //               ),
+                            //             ),
+                            //           ),
+                            //         ),
+                            //       ),
+                            //     ],
+                            //   ),
+                            // ),
+
+                            Obx(
+                                  () => Container(
+                                height: 64,
+                                padding: const EdgeInsets.all(6),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(24),
+                                  color: const Color(0xffF6F7FB),
+                                  border: Border.all(
+                                    color: Colors.grey.shade200,
+                                  ),
+                                  boxShadow: [
+
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.03),
+                                      blurRadius: 14,
+                                      offset: const Offset(0, 6),
+                                    ),
+
+                                    const BoxShadow(
+                                      color: Colors.white,
+                                      blurRadius: 8,
+                                      offset: Offset(-2, -2),
+                                    ),
+                                  ],
+                                ),
+                                child: Stack(
+                                  children: [
+
+                                    /// ACTIVE BACKGROUND
+                                    AnimatedAlign(
+                                      duration: const Duration(milliseconds: 280),
+                                      curve: Curves.easeInOut,
+                                      alignment:
+                                      controller.selectedEmailAuthType.value == 0
+                                          ? Alignment.centerLeft
+                                          : Alignment.centerRight,
+                                      child: Container(
+                                        width:
+                                        (MediaQuery.of(context).size.width - 64) / 2,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(20),
+                                          gradient: LinearGradient(
+                                            colors: [
+                                              AppColors.primaryDark,
+                                              AppColors.primaryDark.withOpacity(0.82),
+                                            ],
+                                          ),
+                                          boxShadow: [
+
+                                            BoxShadow(
+                                              color: AppColors.primaryDark
+                                                  .withOpacity(0.35),
+                                              blurRadius: 18,
+                                              offset: const Offset(0, 8),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+
+                                    /// BUTTONS
+                                    Row(
+                                      children: [
+
+                                        /// OTP
+                                        Expanded(
+                                          child: GestureDetector(
+                                            behavior: HitTestBehavior.opaque,
+                                            onTap: () {
+                                              controller.switchEmailAuthType(0);
+                                            },
+                                            child: Center(
+                                              child: AnimatedDefaultTextStyle(
+                                                duration:
+                                                const Duration(milliseconds: 220),
+                                                style: TextStyle(
+                                                  color:
+                                                  controller.selectedEmailAuthType.value == 0
+                                                      ? Colors.white
+                                                      : Colors.black87,
+                                                  fontWeight: FontWeight.w700,
+                                                  fontSize: 14,
+                                                  letterSpacing: 0.2,
+                                                ),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                                  children: [
+
+                                                    Icon(
+                                                      Icons.flash_on_rounded,
+                                                      size: 18,
+                                                      color:
+                                                      controller.selectedEmailAuthType.value == 0
+                                                          ? Colors.white
+                                                          : Colors.grey.shade700,
+                                                    ),
+
+                                                    const SizedBox(width: 8),
+
+                                                    const Text(
+                                                      "OTP Login",
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+
+                                        /// PASSWORD
+                                        Expanded(
+                                          child: GestureDetector(
+                                            behavior: HitTestBehavior.opaque,
+                                            onTap: () {
+                                              controller.switchEmailAuthType(1);
+                                            },
+                                            child: Center(
+                                              child: AnimatedDefaultTextStyle(
+                                                duration:
+                                                const Duration(milliseconds: 220),
+                                                style: TextStyle(
+                                                  color:
+                                                  controller.selectedEmailAuthType.value == 1
+                                                      ? Colors.white
+                                                      : Colors.black87,
+                                                  fontWeight: FontWeight.w700,
+                                                  fontSize: 14,
+                                                  letterSpacing: 0.2,
+                                                ),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                                  children: [
+
+                                                    Icon(
+                                                      Icons.lock_rounded,
+                                                      size: 17,
+                                                      color:
+                                                      controller.selectedEmailAuthType.value == 1
+                                                          ? Colors.white
+                                                          : Colors.grey.shade700,
+                                                    ),
+
+                                                    const SizedBox(width: 8),
+
+                                                    const Text(
+                                                      "Password",
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 22),
+
+                            /// =========================
+                            /// PASSWORD LOGIN FLOW
+                            /// =========================
+
+                            if (controller.selectedEmailAuthType.value == 1) ...[
 
                               inputField(
                                 controller.email,
                                 "Email Address",
                                 Icons.email_outlined,
-                                keyboardType:
-                                TextInputType.emailAddress,
+                                keyboardType: TextInputType.emailAddress,
                               ),
 
-                              const SizedBox(
-                                height: 22,
+                              const SizedBox(height: 16),
+
+                              Obx(
+                                    () => inputField(
+                                  controller.password,
+                                  "Password",
+                                  Icons.lock_outline,
+                                  isPassword: true,
+                                  isObscure:
+                                  controller.isObscure.value,
+                                  onToggle: () {
+                                    controller.isObscure.value =
+                                    !controller.isObscure.value;
+                                  },
+                                ),
                               ),
+
+                              const SizedBox(height: 22),
 
                               mainButton(
-                                title: "Send OTP",
-                                loading:
-                                controller.isLoading.value,
-                                onTap: controller
-                                    .isLoading.value
+                                title: "Continue",
+                                loading: controller.isLoading.value,
+                                onTap: controller.isLoading.value
                                     ? null
-                                    : controller.sendOtp,
+                                    : controller.login,
                               ),
                             ],
 
-                            /// OTP SCREEN
-                            if (controller.isOtpSent.value) ...[
+                            /// =========================
+                            /// OTP LOGIN FLOW
+                            /// =========================
 
-                              Row(
-                                children: [
+                            if (controller.selectedEmailAuthType.value == 0) ...[
 
-                                  Expanded(
-                                    child: RichText(
-                                      text: TextSpan(
-                                        style: const TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 15,
-                                        ),
-                                        children: [
+                              /// EMAIL FIELD
+                              if (!controller.isOtpSent.value) ...[
 
-                                          const TextSpan(
-                                            text: "OTP sent to ",
-                                          ),
-
-                                          TextSpan(
-                                            text:
-                                            controller.email.text,
-                                            style:
-                                            const TextStyle(
-                                              fontWeight:
-                                              FontWeight.bold,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-
-                                  TextButton(
-                                    onPressed:
-                                    controller.changeEmail,
-                                    child: const Text(
-                                      "Change",
-                                    ),
-                                  ),
-                                ],
-                              ),
-
-                              const SizedBox(height: 20),
-
-                              /// OTP BOXES
-                              PinCodeTextField(
-                                appContext: context,
-                                length: 6,
-                                keyboardType:
-                                TextInputType.number,
-                                animationType:
-                                AnimationType.fade,
-                                enableActiveFill: true,
-                                cursorColor:
-                                AppColors.primaryDark,
-                                inputFormatters: [
-                                  FilteringTextInputFormatter
-                                      .digitsOnly,
-                                ],
-                                onChanged: (value) {
-
-                                  controller.otpValue.value =
-                                      value;
-
-                                  controller.otp.text =
-                                      value;
-                                },
-                                pinTheme: PinTheme(
-                                  shape:
-                                  PinCodeFieldShape.box,
-                                  borderRadius:
-                                  BorderRadius.circular(
-                                    16,
-                                  ),
-                                  fieldHeight: 54,
-                                  fieldWidth: 48,
-                                  activeColor:
-                                  AppColors.primaryDark,
-                                  selectedColor:
-                                  AppColors.primaryDark,
-                                  inactiveColor:
-                                  Colors.grey.shade300,
-                                  activeFillColor:
-                                  Colors.white,
-                                  selectedFillColor:
-                                  Colors.white,
-                                  inactiveFillColor:
-                                  Colors.white,
+                                inputField(
+                                  controller.email,
+                                  "Email Address",
+                                  Icons.email_outlined,
+                                  keyboardType:
+                                  TextInputType.emailAddress,
                                 ),
-                              ),
-
-                              const SizedBox(height: 8),
-
-                              /// TIMER
-                              Obx(
-                                    () => controller
-                                    .otpSeconds.value ==
-                                    0
-                                    ? TextButton(
-                                  onPressed:
-                                  controller.sendOtp,
-                                  child: const Text(
-                                    "Resend OTP",
-                                  ),
-                                )
-                                    : Text(
-                                  "Resend OTP in 00:${controller.otpSeconds.value.toString().padLeft(2, '0')}",
-                                  style: TextStyle(
-                                    color: Colors
-                                        .grey.shade600,
-                                  ),
-                                ),
-                              ),
-
-                              const SizedBox(height: 18),
-
-                              /// VERIFY BUTTON
-                              mainButton(
-                                title: controller
-                                    .isOtpVerified.value
-                                    ? "OTP Verified ✓"
-                                    : "Verify OTP",
-                                backgroundColor:
-                                controller.otpValue.value
-                                    .length ==
-                                    6
-                                    ? Colors.green
-                                    : Colors.grey,
-                                onTap: controller
-                                    .otpValue.value.length ==
-                                    6
-                                    ? controller.verifyOtp
-                                    : null,
-                              ),
-
-                              /// CONTINUE BUTTON
-                              if (controller
-                                  .isOtpVerified.value) ...[
 
                                 const SizedBox(
-                                  height: 15,
+                                  height: 22,
                                 ),
 
                                 mainButton(
-                                  title: "Continue",
-                                  onTap:
-                                  controller.loginWithOtp,
+                                  title: "Send OTP",
+                                  loading:
+                                  controller.isLoading.value,
+                                  onTap: controller
+                                      .isLoading.value
+                                      ? null
+                                      : controller.sendOtp,
                                 ),
+                              ],
+
+                              /// OTP SCREEN
+                              if (controller.isOtpSent.value) ...[
+
+                                Row(
+                                  children: [
+
+                                    Expanded(
+                                      child: RichText(
+                                        text: TextSpan(
+                                          style: const TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 15,
+                                          ),
+                                          children: [
+
+                                            const TextSpan(
+                                              text: "OTP sent to ",
+                                            ),
+
+                                            TextSpan(
+                                              text:
+                                              controller.email.text,
+                                              style:
+                                              const TextStyle(
+                                                fontWeight:
+                                                FontWeight.bold,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+
+                                    TextButton(
+                                      onPressed:
+                                      controller.changeEmail,
+                                      child: const Text(
+                                        "Change",
+                                      ),
+                                    ),
+                                  ],
+                                ),
+
+                                const SizedBox(height: 20),
+
+                                /// OTP BOXES
+                                PinCodeTextField(
+                                  appContext: context,
+                                  length: 6,
+                                  keyboardType:
+                                  TextInputType.number,
+                                  animationType:
+                                  AnimationType.fade,
+                                  enableActiveFill: true,
+                                  cursorColor:
+                                  AppColors.primaryDark,
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter
+                                        .digitsOnly,
+                                  ],
+                                  onChanged: (value) {
+
+                                    controller.otpValue.value =
+                                        value;
+
+                                    controller.otp.text =
+                                        value;
+                                  },
+                                  pinTheme: PinTheme(
+                                    shape:
+                                    PinCodeFieldShape.box,
+                                    borderRadius:
+                                    BorderRadius.circular(
+                                      16,
+                                    ),
+                                    fieldHeight: 54,
+                                    fieldWidth: 48,
+                                    activeColor:
+                                    AppColors.primaryDark,
+                                    selectedColor:
+                                    AppColors.primaryDark,
+                                    inactiveColor:
+                                    Colors.grey.shade300,
+                                    activeFillColor:
+                                    Colors.white,
+                                    selectedFillColor:
+                                    Colors.white,
+                                    inactiveFillColor:
+                                    Colors.white,
+                                  ),
+                                ),
+
+                                const SizedBox(height: 8),
+
+                                /// TIMER
+                                Obx(
+                                      () => controller
+                                      .otpSeconds.value ==
+                                      0
+                                      ? TextButton(
+                                    onPressed:
+                                    controller.sendOtp,
+                                    child: const Text(
+                                      "Resend OTP",
+                                    ),
+                                  )
+                                      : Text(
+                                    "Resend OTP in 00:${controller.otpSeconds.value.toString().padLeft(2, '0')}",
+                                    style: TextStyle(
+                                      color: Colors
+                                          .grey.shade600,
+                                    ),
+                                  ),
+                                ),
+
+                                const SizedBox(height: 18),
+
+                                /// VERIFY BUTTON
+                                mainButton(
+                                  title: controller
+                                      .isOtpVerified.value
+                                      ? "OTP Verified ✓"
+                                      : "Verify OTP",
+                                  backgroundColor:
+                                  controller.otpValue.value
+                                      .length ==
+                                      6
+                                      ? Colors.green
+                                      : Colors.grey,
+                                  onTap: controller
+                                      .otpValue.value.length ==
+                                      6
+                                      ? controller.verifyOtp
+                                      : null,
+                                ),
+
+                                /// CONTINUE BUTTON
+                                if (controller
+                                    .isOtpVerified.value) ...[
+
+                                  const SizedBox(
+                                    height: 15,
+                                  ),
+
+                                  mainButton(
+                                    title: "Continue",
+                                    onTap:
+                                    controller.loginWithOtp,
+                                  ),
+                                ],
                               ],
                             ],
                           ],

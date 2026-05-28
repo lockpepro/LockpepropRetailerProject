@@ -244,7 +244,8 @@ class RetailAccountPage extends StatelessWidget {
                   ),
                   SettingsTile(
                     icon: "assets/accounts/add.svg",
-                    title: "Advertisement Video",
+                    // title: "Advertisement Video",
+                    title: "Installation video 📹",
                     // onTap: () => controller.onMenuTap("/ads"),
                     onTap: () {
                       Get.to(AddVideoBannerScreen());

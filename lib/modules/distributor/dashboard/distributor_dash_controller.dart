@@ -306,24 +306,52 @@ class DistributorDashController extends GetxController {
     final vendor = d.vendorStats?.byType?.vendor;
     final subRetailer = d.vendorStats?.byType?.retailer;
 
+    //
+    // ///retailer-vendor
+    // totalRetailers.value = vendor?.total  ?? 0;
+    // activeRetailers.value = vendor?.active ?? 0;
+    // inActiveRetailers.value = vendor?.inactive ?? 0;
+    //
+    // ///sub retailer -retailer
+    // totalSubRetailers.value = subRetailer?.total ?? 0;
+    // activeSubRetailers.value = subRetailer?.active ?? 0;
+    // inActiveSubRetailers.value = subRetailer?.inactive ?? 0;
+    //
+    // /// set subdistributor count
+    // totalSubDistributor.value = sub?.total ?? 0;
+    // activeSubDistributor.value = sub?.active ?? 0;
+    // inActiveSubDistributor.value = sub?.inactive ?? 0;
+    //
+    // /// set distributor count
+    // totalDistributor.value = dist?.total ?? 0;
+    // activeDistributor.value = dist?.active ?? 0;
+    // inActiveDistributor.value = dist?.inactive ?? 0;
 
     ///retailer-vendor
-    totalRetailers.value = vendor?.total ?? 0;
+    totalRetailers.value =
+        (vendor?.total ?? 0) - (vendor?.deleted ?? 0);
+
     activeRetailers.value = vendor?.active ?? 0;
     inActiveRetailers.value = vendor?.inactive ?? 0;
 
     ///sub retailer -retailer
-    totalSubRetailers.value = subRetailer?.total ?? 0;
+    totalSubRetailers.value =
+        (subRetailer?.total ?? 0) - (subRetailer?.deleted ?? 0);
+
     activeSubRetailers.value = subRetailer?.active ?? 0;
     inActiveSubRetailers.value = subRetailer?.inactive ?? 0;
 
     /// set subdistributor count
-    totalSubDistributor.value = sub?.total ?? 0;
+    totalSubDistributor.value =
+        (sub?.total ?? 0) - (sub?.deleted ?? 0);
+
     activeSubDistributor.value = sub?.active ?? 0;
     inActiveSubDistributor.value = sub?.inactive ?? 0;
 
     /// set distributor count
-    totalDistributor.value = dist?.total ?? 0;
+    totalDistributor.value =
+        (dist?.total ?? 0) - (dist?.deleted ?? 0);
+
     activeDistributor.value = dist?.active ?? 0;
     inActiveDistributor.value = dist?.inactive ?? 0;
     update();

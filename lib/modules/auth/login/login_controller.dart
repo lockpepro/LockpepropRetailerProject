@@ -410,6 +410,27 @@ class LoginController extends GetxController {
   final _authService = AuthService();
   final _box = GetStorage();
 
+  final selectedEmailAuthType = 0.obs;
+
+  /// 0 = OTP
+  /// 1 = PASSWORD
+
+  void switchEmailAuthType(int index) {
+
+    selectedEmailAuthType.value = index;
+
+    /// RESET STATES
+    isOtpSent.value = false;
+    isOtpVerified.value = false;
+
+    otp.clear();
+    otpValue.value = '';
+
+    otpSeconds.value = 60;
+
+    otpTimer?.cancel();
+  }
+
   @override
   void onInit() {
     role = (Get.arguments ?? "retailer").toString().toLowerCase();

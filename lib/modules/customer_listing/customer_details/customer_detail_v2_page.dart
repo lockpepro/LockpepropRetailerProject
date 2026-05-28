@@ -485,8 +485,9 @@ class CustomerDetailV2Page extends StatelessWidget {
 
   Widget _commandsTab() {
     return SingleChildScrollView(
-      padding: const EdgeInsets.fromLTRB(16, 16, 16, 120),
+      // padding: const EdgeInsets.fromLTRB(16, 16, 16, 120),
 
+      padding: const EdgeInsets.fromLTRB(12, 8, 12, 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -504,7 +505,7 @@ class CustomerDetailV2Page extends StatelessWidget {
             );
           }),
 
-          const SizedBox(height: 18),
+          const SizedBox(height: 8),
 
           /// 🔴 SPECIAL COMMANDS (NOW HERE)
           // GridView.builder(
@@ -535,12 +536,33 @@ class CustomerDetailV2Page extends StatelessWidget {
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             itemCount: ctrl.orderedCommands.length,
+            // gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            //   crossAxisCount: 3,
+            //   childAspectRatio: 0.77,
+            //   crossAxisSpacing: 12,
+            //   mainAxisSpacing: 12,
+            // ),
+
+            // gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            //   crossAxisCount: 3,
+            //   childAspectRatio: 0.92,
+            //   crossAxisSpacing: 10,
+            //   mainAxisSpacing: 10,
+            // ),
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 3,
-              childAspectRatio: 0.77,
-              crossAxisSpacing: 12,
-              mainAxisSpacing: 12,
+              childAspectRatio: 1.02,
+              crossAxisSpacing: 8,
+              mainAxisSpacing: 8,
             ),
+
+            // gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            //   crossAxisCount: 3,
+            //   childAspectRatio: 1.08,
+            //   crossAxisSpacing: 8,
+            //   mainAxisSpacing: 8,
+            // ),
+
             itemBuilder: (_, i) {
               final title = ctrl.orderedCommands[i];
 
@@ -814,7 +836,7 @@ class CustomerDetailV2Page extends StatelessWidget {
             },
           ),
 
-          const SizedBox(height: 18),
+          const SizedBox(height: 8),
 
           /// 🔹 MAIN COMMAND GRID
 
@@ -985,7 +1007,8 @@ class CustomerDetailV2Page extends StatelessWidget {
               },
               child: Container(
                 width: double.infinity,
-                padding: const EdgeInsets.symmetric(vertical: 18),
+                // padding: const EdgeInsets.symmetric(vertical: 18),
+                padding: const EdgeInsets.symmetric(vertical: 14),
                 decoration: BoxDecoration(
                   color: Colors.red,
                   borderRadius: BorderRadius.circular(14),
@@ -997,7 +1020,7 @@ class CustomerDetailV2Page extends StatelessWidget {
                   "Remove Device",
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 16,
+                    fontSize: 15,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -1222,8 +1245,10 @@ class CustomerDetailV2Page extends StatelessWidget {
   }) {
     Widget icon(String asset) {
       return Container(
-        width: 44,
-        height: 44,
+        // width: 44,
+        // height: 44,
+        width: 36,
+        height: 36,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           color: Colors.white,
@@ -1255,7 +1280,11 @@ class CustomerDetailV2Page extends StatelessWidget {
     }
 
     return Container(
-      padding: const EdgeInsets.all(16),
+      // padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(
+        horizontal: 14,
+        vertical: 8,
+      ),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(26),
         gradient: const LinearGradient(
@@ -1313,8 +1342,10 @@ class CustomerDetailV2Page extends StatelessWidget {
 
               /// glow
               Container(
-                width: 90,
-                height: 90,
+                // width: 90,
+                // height: 90,
+                width: 50,
+                height: 50,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: const Color(0xff4F6BED).withOpacity(.08),
@@ -1323,8 +1354,10 @@ class CustomerDetailV2Page extends StatelessWidget {
 
               /// ✅ CENTER LOGO (REPLACED LOCK ICON)
               Container(
-                width: 56,
-                height: 56,
+                // width: 56,
+                // height: 56,
+                width: 40,
+                height: 40,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   border: Border.all(color: const Color(0xff4F6BED), width: 1.5),
@@ -1346,49 +1379,87 @@ class CustomerDetailV2Page extends StatelessWidget {
 
               /// 🔵 ICONS AROUND
               SizedBox(
-                width: 200,
-                height: 200,
+                // width: 200,
+                // height: 200,
+                width: 150,
+                height: 150,
+
                 child: Stack(
                   children: [
 
+                    // // Positioned(
+                    // //     top: 0,
+                    // //     left: 78,
+                    // //     child: icon("assets/icons/commands/youtube.svg")),
                     // Positioned(
                     //     top: 0,
                     //     left: 78,
-                    //     child: icon("assets/icons/commands/youtube.svg")),
-                    Positioned(
-                        top: 0,
-                        left: 78,
-                        child: icon("assets/icons/commands/youtube_colour.svg")),
-
+                    //     child: icon("assets/icons/commands/youtube_colour.svg")),
+                    //
+                    // // Positioned(
+                    // //     top: 40,
+                    // //     right: 10,
+                    // //     child: icon("assets/icons/commands/whatsapp.svg")),
                     // Positioned(
                     //     top: 40,
                     //     right: 10,
-                    //     child: icon("assets/icons/commands/whatsapp.svg")),
+                    //     child: icon("assets/icons/commands/whatsupp_colour.svg")),
+                    //
+                    // Positioned(
+                    //     right: 8,
+                    //     top: 110,
+                    //     child: icon("assets/icons/commands/wa_business.svg",)),
+                    //
+                    //
+                    // Positioned(
+                    //     bottom: 0,
+                    //     left: 78,
+                    //     child: icon("assets/icons/commands/facebook_color.svg")),
+                    //
+                    // Positioned(
+                    //     left: 8,
+                    //     top: 110,
+                    //     child: icon("assets/icons/commands/insta_colour.svg")),
+                    //
+                    // Positioned(
+                    //     top: 40,
+                    //     left: 10,
+                    //     child: icon("assets/icons/commands/arattai_colour.svg")),
                     Positioned(
-                        top: 40,
-                        right: 10,
-                        child: icon("assets/icons/commands/whatsupp_colour.svg")),
+                      top: 0,
+                      left: 57,
+                      child: icon("assets/icons/commands/youtube_colour.svg"),
+                    ),
 
                     Positioned(
-                        right: 8,
-                        top: 110,
-                        child: icon("assets/icons/commands/wa_business.svg",)),
-
-
-                    Positioned(
-                        bottom: 0,
-                        left: 78,
-                        child: icon("assets/icons/commands/facebook_color.svg")),
+                      top: 28,
+                      right: 0,
+                      child: icon("assets/icons/commands/whatsupp_colour.svg"),
+                    ),
 
                     Positioned(
-                        left: 8,
-                        top: 110,
-                        child: icon("assets/icons/commands/insta_colour.svg")),
+                      right: 0,
+                      top: 82,
+                      child: icon("assets/icons/commands/wa_business.svg"),
+                    ),
 
                     Positioned(
-                        top: 40,
-                        left: 10,
-                        child: icon("assets/icons/commands/arattai_colour.svg")),
+                      bottom: 0,
+                      left: 57,
+                      child: icon("assets/icons/commands/facebook_color.svg"),
+                    ),
+
+                    Positioned(
+                      left: 0,
+                      top: 82,
+                      child: icon("assets/icons/commands/insta_colour.svg"),
+                    ),
+
+                    Positioned(
+                      top: 28,
+                      left: 0,
+                      child: icon("assets/icons/commands/arattai_colour.svg"),
+                    ),
                   ],
                 ),
               ),
@@ -1412,10 +1483,36 @@ class CustomerDetailV2Page extends StatelessWidget {
       opacity: isDisabled ? 0.5 : 1,
       child: Container(
         padding: const EdgeInsets.all(8),
+        // decoration: BoxDecoration(
+        //   borderRadius: BorderRadius.circular(16),
+        //   border: Border.all(color: const Color(0xff4F6BED)),
+        //   color: Colors.white,
+        // ),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: const Color(0xff4F6BED)),
-          color: Colors.white,
+          borderRadius: BorderRadius.circular(18),
+
+          /// SAME AS SPECIAL COMMAND CARD
+          gradient: const LinearGradient(
+            colors: [
+              Color(0xFFF7F9FF),
+              Color(0xFFEAF0FF),
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+
+          border: Border.all(
+            color: const Color(0xff4F6BED).withOpacity(.12),
+            width: 1,
+          ),
+
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(.04),
+              blurRadius: 8,
+              offset: const Offset(0, 3),
+            ),
+          ],
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -2479,6 +2576,7 @@ class CustomerDetailV2Page extends StatelessWidget {
       ),
     );
   }
+
   void showMobileNumberPopup({
     required List<String> simNumbers,
     bool isLoading = false,

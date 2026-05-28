@@ -1038,6 +1038,74 @@
       }
     }
 
+    // Future<List<String>> fetchSimNumbers() async {
+    //   final id = actualDeviceId;
+    //
+    //   debugPrint("📱 Device ID => $id");
+    //
+    //   if (id.isEmpty) {
+    //     Get.snackbar("Error", "Device ID missing");
+    //     return [];
+    //   }
+    //
+    //   try {
+    //     /// 🔹 SEND COMMAND
+    //     await _commandService.sendCommand(
+    //       DeviceCommandRequest(
+    //         deviceId: id,
+    //         commandType: "GET_NUMBER",
+    //       ),
+    //     );
+    //
+    //     /// ⏳ WAIT
+    //     await Future.delayed(const Duration(seconds: 3));
+    //
+    //     final dio = Dio();
+    //
+    //     final response = await dio.get(
+    //       "https://lockpepro.com/api/mdm/devices/$id/sim-info",
+    //       options: Options(
+    //         headers: {
+    //           "Authorization": "Bearer ${box.read("token")}",
+    //           "Accept": "application/json",
+    //         },
+    //       ),
+    //     );
+    //
+    //     if (response.data is! Map) return [];
+    //
+    //     final data = response.data;
+    //
+    //     if (data["success"] != true) return [];
+    //
+    //     final simInfo = data["current_sim_info"] ?? {};
+    //
+    //     List<String> numbers = [];
+    //
+    //     /// 🔥 DYNAMIC SIM PARSER (BEST)
+    //     for (int i = 1; i <= 5; i++) {
+    //       final key = "sim${i}_number";
+    //
+    //       if (simInfo.containsKey(key)) {
+    //         final value = simInfo[key]?.toString().trim();
+    //
+    //         if (value != null &&
+    //             value.isNotEmpty &&
+    //             value != "null") {
+    //           numbers.add(value);
+    //         }
+    //       }
+    //     }
+    //
+    //     debugPrint("📲 NUMBERS => $numbers");
+    //
+    //     return numbers;
+    //   } catch (e) {
+    //     debugPrint("❌ ERROR => $e");
+    //     return [];
+    //   }
+    // }
+
     Future<List<String>> fetchSimNumbers() async {
       final id = actualDeviceId;
 
@@ -1072,32 +1140,51 @@
           ),
         );
 
-        if (response.data is! Map) return [];
+        debugPrint("✅ FULL API RESPONSE => ${response.data}");
+
+        if (response.data is! Map) {
+          debugPrint("❌ RESPONSE IS NOT MAP");
+          return [];
+        }
 
         final data = response.data;
 
-        if (data["success"] != true) return [];
+        debugPrint("✅ SUCCESS => ${data["success"]}");
 
-        final simInfo = data["sim_info"] ?? {};
+        if (data["success"] != true) {
+          debugPrint("❌ API SUCCESS FALSE");
+          return [];
+        }
+
+        /// 🔥 FIXED KEY
+        final simInfo = data["current_sim_info"] ?? {};
+
+        debugPrint("📲 SIM INFO => $simInfo");
 
         List<String> numbers = [];
 
-        /// 🔥 DYNAMIC SIM PARSER (BEST)
+        /// 🔥 DYNAMIC SIM PARSER
         for (int i = 1; i <= 5; i++) {
           final key = "sim${i}_number";
 
+          debugPrint("🔍 CHECKING KEY => $key");
+
           if (simInfo.containsKey(key)) {
             final value = simInfo[key]?.toString().trim();
+
+            debugPrint("📞 VALUE => $value");
 
             if (value != null &&
                 value.isNotEmpty &&
                 value != "null") {
               numbers.add(value);
+
+              debugPrint("✅ ADDED NUMBER => $value");
             }
           }
         }
 
-        debugPrint("📲 NUMBERS => $numbers");
+        debugPrint("📲 FINAL NUMBERS => $numbers");
 
         return numbers;
       } catch (e) {
@@ -1105,7 +1192,6 @@
         return [];
       }
     }
-
     Future<void> scheduleLockApi(String scheduleAt) async {
       try {
         final deviceId = actualDeviceId;
