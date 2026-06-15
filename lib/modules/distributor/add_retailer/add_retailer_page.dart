@@ -101,7 +101,60 @@ class AddRetailerPage extends StatelessWidget {
                     _field("Retailer Email ID", c.email,
                         keyboard: TextInputType.emailAddress),
                     // _field("Membership Plan Name", c.plan),
-                    _field("State", c.state),
+                    // _field("State", c.state),
+                    // Obx(
+                    //       () => Padding(
+                    //     padding: const EdgeInsets.only(bottom: 12),
+                    //     child: DropdownButtonFormField<String>(
+                    //       value: c.selectedState.value.isEmpty
+                    //           ? null
+                    //           : c.selectedState.value,
+                    //       decoration: _inputDecoration("State"),
+                    //       items: c.states
+                    //           .map(
+                    //             (e) => DropdownMenuItem(
+                    //           value: e,
+                    //           child: Text(e),
+                    //         ),
+                    //       )
+                    //           .toList(),
+                    //       onChanged: (value) {
+                    //         if (value != null) {
+                    //           c.selectedState.value = value;
+                    //           c.state.text = value; // API same value bhejegi
+                    //         }
+                    //       },
+                    //     ),
+                    //   ),
+                    // ),
+                    Obx(
+                          () => Padding(
+                        padding: const EdgeInsets.only(bottom: 12),
+                        child: DropdownButtonFormField<String>(
+                          isExpanded: true, // ✅ ADD THIS
+                          value: c.selectedState.value.isEmpty
+                              ? null
+                              : c.selectedState.value,
+                          decoration: _inputDecoration("State"),
+                          items: c.states.map((e) {
+                            return DropdownMenuItem<String>(
+                              value: e,
+                              child: Text(
+                                e,
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                              ),
+                            );
+                          }).toList(),
+                          onChanged: (value) {
+                            if (value != null) {
+                              c.selectedState.value = value;
+                              c.state.text = value;
+                            }
+                          },
+                        ),
+                      ),
+                    ),
                     _field("City", c.city),
                     _field("Full Address", c.address, maxLines: 3),
                     _field("GST Number", c.gst),

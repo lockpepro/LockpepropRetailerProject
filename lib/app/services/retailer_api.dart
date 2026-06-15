@@ -110,6 +110,14 @@ class RetailerAPI {
   static String updateFrpEmail =
       "$baseUrl/api/v1/auth/frp-email/update";
 
+  /// GET EMI SCHEDULE
+  static String getCustomerEmi(String customerId) =>
+      "$baseUrl/api/customers/emi/schedule?id=$customerId";
+
+  /// UPDATE EMI
+  static String updateCustomerEmi() =>
+      "$baseUrl/api/customers/emi/updatstatus";
+
   ///old apis
   // static String baseUrl = "https://sunil-z-plus-project.vercel.app";
   // static String login = "$baseUrl/api/v1/user/login";
@@ -135,8 +143,8 @@ class RetailerAPI {
   static String deviceQr(String deviceMongoId) =>
       "$baseUrl/api/v1/retailer/device/$deviceMongoId/qr";
 
-  static String updateEmi(String emiId) =>
-      "$baseUrl/api/v1/retailer/emi/$emiId";
+  // static String updateEmi(String emiId) =>
+  //     "$baseUrl/api/v1/retailer/emi/$emiId";
 
   static String updateKey(String id) => "$baseUrl/api/v1/retailer/update-key/$id";
 

@@ -836,7 +836,7 @@ class CustomerDetailV2Page extends StatelessWidget {
             },
           ),
 
-          const SizedBox(height: 8),
+          // const SizedBox(height: 8),
 
           /// 🔹 MAIN COMMAND GRID
 
@@ -1028,7 +1028,7 @@ class CustomerDetailV2Page extends StatelessWidget {
             );
           }),
 
-          const SizedBox(height: 20),
+          const SizedBox(height: 40),
         ],
       ),
 
@@ -1789,6 +1789,8 @@ class CustomerDetailV2Page extends StatelessWidget {
       /// 🔹 SHOW LOADING
       showMobileNumberPopup(
         simNumbers: [],
+        simHistory: ctrl.simHistory.toList(),
+
         isLoading: true,
       );
 
@@ -1806,6 +1808,8 @@ class CustomerDetailV2Page extends StatelessWidget {
       /// 🔹 SHOW FINAL RESULT
       showMobileNumberPopup(
         simNumbers: numbers,
+        simHistory: ctrl.simHistory.toList(),
+
         isLoading: false,
       );
 
@@ -2579,6 +2583,7 @@ class CustomerDetailV2Page extends StatelessWidget {
 
   void showMobileNumberPopup({
     required List<String> simNumbers,
+    required List<Map<String, dynamic>> simHistory,
     bool isLoading = false,
   }) {
     Get.dialog(
@@ -2626,7 +2631,58 @@ class CustomerDetailV2Page extends StatelessWidget {
                   }).toList(),
               ],
 
-              const SizedBox(height: 16),
+              const SizedBox(height: 12),
+              if (!isLoading &&
+                  simHistory.isNotEmpty) ...[
+
+                const SizedBox(height: 12),
+
+                InkWell(
+                  onTap: () {
+                    showSimHistoryPopup(simHistory);
+                  },
+                  child: Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        colors: [
+                          Color(0xFF4F6BED),
+                          Color(0xFF3153D8),
+                        ],
+                      ),
+                      borderRadius: BorderRadius.circular(50),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Color(0x334F6BED),
+                          blurRadius: 12,
+                          offset: Offset(0, 5),
+                        ),
+                      ],
+                    ),
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.history,
+                          color: Colors.white,
+                          size: 18,
+                        ),
+                        SizedBox(width: 8),
+                        Text(
+                          "SIM History",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 15,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+              const SizedBox(height: 12),
 
               /// 🔹 BUTTON
               InkWell(
@@ -2651,6 +2707,197 @@ class CustomerDetailV2Page extends StatelessWidget {
         ),
       ),
       barrierDismissible: false, // 🔥 IMPORTANT
+    );
+  }
+
+  void showSimHistoryPopup(
+      List<Map<String, dynamic>> history,
+      ) {
+    Get.dialog(
+      Dialog(
+        insetPadding: const EdgeInsets.symmetric(
+          horizontal: 18,
+          vertical: 24,
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(24),
+        ),
+        child: Container(
+          constraints: const BoxConstraints(
+            maxHeight: 600,
+          ),
+          padding: const EdgeInsets.all(18),
+          child: Column(
+            children: [
+
+              /// HEADER
+              Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF3153D8)
+                          .withOpacity(.1),
+                      borderRadius:
+                      BorderRadius.circular(12),
+                    ),
+                    child: const Icon(
+                      Icons.history,
+                      color: Color(0xFF3153D8),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  const Expanded(
+                    child: Text(
+                      "SIM History",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 16),
+
+              Expanded(
+                child: ListView.separated(
+                  itemCount: history.length,
+                  separatorBuilder: (_, __) =>
+                  const SizedBox(height: 10),
+                  itemBuilder: (_, index) {
+
+                    final item = history[index];
+
+                    final sim1 =
+                        item["sim1_number"]?.toString() ??
+                            "-";
+
+                    final carrier1 =
+                        item["sim1_carrier"]?.toString() ??
+                            "Unknown";
+
+                    final sim2 =
+                    item["sim2_number"]?.toString();
+
+                    final carrier2 =
+                    item["sim2_carrier"]?.toString();
+
+                    return Container(
+                      padding: const EdgeInsets.all(14),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius:
+                        BorderRadius.circular(16),
+                        border: Border.all(
+                          color: const Color(
+                              0xFF3153D8)
+                              .withOpacity(.15),
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black
+                                .withOpacity(.04),
+                            blurRadius: 8,
+                          )
+                        ],
+                      ),
+                      child: Column(
+                        crossAxisAlignment:
+                        CrossAxisAlignment.start,
+                        children: [
+
+                          /// HISTORY TAG
+                          Container(
+                            padding:
+                            const EdgeInsets.symmetric(
+                              horizontal: 10,
+                              vertical: 4,
+                            ),
+                            decoration: BoxDecoration(
+                              color: const Color(
+                                  0xFF3153D8)
+                                  .withOpacity(.08),
+                              borderRadius:
+                              BorderRadius.circular(
+                                  30),
+                            ),
+                            child: Text(
+                              "History #${index + 1}",
+                              style: const TextStyle(
+                                color:
+                                Color(0xFF3153D8),
+                                fontWeight:
+                                FontWeight.w600,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ),
+
+                          const SizedBox(height: 12),
+
+                          _historyRow(
+                            "SIM 1",
+                            sim1,
+                          ),
+
+                          _historyRow(
+                            "Carrier",
+                            carrier1,
+                          ),
+
+                          if (sim2 != null &&
+                              sim2.isNotEmpty) ...[
+                            const Divider(),
+
+                            _historyRow(
+                              "SIM 2",
+                              sim2,
+                            ),
+
+                            _historyRow(
+                              "Carrier",
+                              carrier2 ?? "-",
+                            ),
+                          ],
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              ),
+
+              const SizedBox(height: 12),
+
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () => Get.back(),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor:
+                    const Color(0xFF3153D8),
+                    padding:
+                    const EdgeInsets.symmetric(
+                      vertical: 14,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius:
+                      BorderRadius.circular(40),
+                    ),
+                  ),
+                  child: const Text(
+                    "Close",
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
   Widget _infoRowForSim(String label, String value) {
@@ -2687,6 +2934,38 @@ class CustomerDetailV2Page extends StatelessWidget {
     );
   }
 
+  Widget _historyRow(
+      String label,
+      String value,
+      ) {
+    return Padding(
+      padding: const EdgeInsets.only(
+        bottom: 8,
+      ),
+      child: Row(
+        children: [
+          SizedBox(
+            width: 80,
+            child: Text(
+              label,
+              style: const TextStyle(
+                color: Colors.grey,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+          Expanded(
+            child: Text(
+              value,
+              style: const TextStyle(
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
   Future<void> showLocationPopup() async {
     // ✅ Initial location fetch
     await ctrl.getLocationCommand();
@@ -3059,7 +3338,8 @@ class CustomerDetailV2Page extends StatelessWidget {
                         try {
                           final req = DeviceCommandRequest(
                             deviceId: deviceId,
-                            commandType: "UPDATE_APP",
+                            // commandType: "UPDATE_APP",
+                            commandType: "MDM_APP_UPDATE",
                           );
 
                           await ctrl.sendUpdateAppCommand(req);
@@ -3338,6 +3618,80 @@ class CustomerDetailV2Page extends StatelessWidget {
     ));
   }
 
+  // Widget _emiTable(BuildContext context) {
+  //   return Container(
+  //     padding: const EdgeInsets.all(12),
+  //     decoration: BoxDecoration(
+  //       color: Colors.white,
+  //       borderRadius: BorderRadius.circular(16),
+  //     ),
+  //     child: Obx(() => Column(
+  //       children: [
+  //         _tableHeader(),
+  //         const Divider(),
+  //         ...List.generate(ctrl.emis.length, (i) {
+  //           final e = ctrl.emis[i];
+  //           final color = e.status == CustomerDetailV2EmiStatus.paid
+  //               ? Colors.green
+  //               : Colors.red;
+  //
+  //           return _emiRow(
+  //             context,
+  //             i,
+  //             e.date,
+  //             e.amount,
+  //             e.status.label,
+  //             color,
+  //           );
+  //         }),
+  //       ],
+  //     )),
+  //   );
+  // }
+  //
+  // Widget _tableHeader() {
+  //   return Row(
+  //     children: const [
+  //       Expanded(child: Text("Date", style: TextStyle(fontWeight: FontWeight.w600))),
+  //       Expanded(child: Text("Amount", style: TextStyle(fontWeight: FontWeight.w600))),
+  //       Expanded(child: Text("Status", style: TextStyle(fontWeight: FontWeight.w600))),
+  //       Expanded(child: Text("Action", style: TextStyle(fontWeight: FontWeight.w600))),
+  //     ],
+  //   );
+  // }
+  //
+  // Widget _emiRow(
+  //     BuildContext context,
+  //     int index,
+  //     String date,
+  //     String amount,
+  //     String status,
+  //     Color color,
+  //     ) {
+  //   return Padding(
+  //     padding: const EdgeInsets.symmetric(vertical: 10),
+  //     child: Row(
+  //       children: [
+  //         Expanded(child: Text(date)),
+  //         Expanded(child: Text(amount)),
+  //         Expanded(child: Text(status, style: TextStyle(color: color))),
+  //         Expanded(
+  //           child: ElevatedButton(
+  //             onPressed: () => ctrl.openChangeStatusSheet(context, index),
+  //             style: ElevatedButton.styleFrom(
+  //               backgroundColor: const Color(0xff4F6BED),
+  //               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+  //             ),
+  //             child: const Text(
+  //               "Action",
+  //               style: TextStyle(color: Colors.white, fontSize: 12),
+  //             ),
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
   Widget _emiTable(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(12),
@@ -3358,10 +3712,11 @@ class CustomerDetailV2Page extends StatelessWidget {
             return _emiRow(
               context,
               i,
-              e.date,
+              e.emiNumber,
               e.amount,
               e.status.label,
               color,
+              paidDate: e.paidDate,
             );
           }),
         ],
@@ -3372,7 +3727,7 @@ class CustomerDetailV2Page extends StatelessWidget {
   Widget _tableHeader() {
     return Row(
       children: const [
-        Expanded(child: Text("Date", style: TextStyle(fontWeight: FontWeight.w600))),
+        Expanded(child: Text("No", style: TextStyle(fontWeight: FontWeight.w600))),
         Expanded(child: Text("Amount", style: TextStyle(fontWeight: FontWeight.w600))),
         Expanded(child: Text("Status", style: TextStyle(fontWeight: FontWeight.w600))),
         Expanded(child: Text("Action", style: TextStyle(fontWeight: FontWeight.w600))),
@@ -3383,28 +3738,90 @@ class CustomerDetailV2Page extends StatelessWidget {
   Widget _emiRow(
       BuildContext context,
       int index,
-      String date,
-      String amount,
+      dynamic emiNumber,
+      dynamic amount,
       String status,
-      Color color,
-      ) {
+      Color color, {
+        DateTime? paidDate,
+      }) {
+    final bool isPaid = status.toLowerCase() == "paid";
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: Row(
         children: [
-          Expanded(child: Text(date)),
-          Expanded(child: Text(amount)),
-          Expanded(child: Text(status, style: TextStyle(color: color))),
+
           Expanded(
-            child: ElevatedButton(
-              onPressed: () => ctrl.openChangeStatusSheet(context, index),
+            child: Text("$emiNumber"),
+          ),
+
+          Expanded(
+            child: Text("₹ ${amount ?? 0}"),
+          ),
+
+          Expanded(
+            child: Text(
+              status,
+              style: TextStyle(
+                color: color,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+
+          Expanded(
+            flex: 2,
+            child: isPaid
+                ? Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 10,
+                vertical: 8,
+              ),
+              decoration: BoxDecoration(
+                color: Colors.green.withOpacity(.1),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(
+                    Icons.check_circle,
+                    color: Colors.green,
+                    size: 16,
+                  ),
+                  const SizedBox(width: 5),
+                  Text(
+                    paidDate != null
+                        ? DateFormat("dd MMMM yyyy").format(paidDate)
+                        : "Paid",
+                    style: const TextStyle(
+                      color: Colors.green,
+                      fontSize: 11,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              ),
+            )
+                : ElevatedButton(
+              onPressed: () {
+                ctrl.openChangeStatusSheet(
+                  context,
+                  index,
+                );
+              },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xff4F6BED),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
               ),
               child: const Text(
                 "Action",
-                style: TextStyle(color: Colors.white, fontSize: 12),
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 12,
+                ),
               ),
             ),
           ),

@@ -39,6 +39,46 @@ class AddRetailerController extends GetxController {
   // String userId = retailerController.userId.value ??'';
 
 
+  final selectedState = ''.obs;
+
+  final List<String> states = [
+    "Andhra Pradesh",
+    "Arunachal Pradesh",
+    "Assam",
+    "Bihar",
+    "Chhattisgarh",
+    "Goa",
+    "Gujarat",
+    "Haryana",
+    "Himachal Pradesh",
+    "Jharkhand",
+    "Karnataka",
+    "Kerala",
+    "Madhya Pradesh",
+    "Maharashtra",
+    "Manipur",
+    "Meghalaya",
+    "Mizoram",
+    "Nagaland",
+    "Odisha",
+    "Punjab",
+    "Rajasthan",
+    "Sikkim",
+    "Tamil Nadu",
+    "Telangana",
+    "Tripura",
+    "Uttar Pradesh",
+    "Uttarakhand",
+    "West Bengal",
+    "Andaman and Nicobar Islands",
+    "Chandigarh",
+    "Dadra and Nagar Haveli and Daman and Diu",
+    "Delhi",
+    "Jammu and Kashmir",
+    "Ladakh",
+    "Lakshadweep",
+    "Puducherry",
+  ];
   // ✅ bottom sheet like NewKeyController
   void showImagePickOptions(BuildContext context) {
     showModalBottomSheet(
@@ -128,14 +168,14 @@ class AddRetailerController extends GetxController {
       Get.snackbar("Required", "City is required", snackPosition: SnackPosition.BOTTOM);
       return false;
     }
-    if (address.text.trim().isEmpty) {
-      Get.snackbar("Required", "Address is required", snackPosition: SnackPosition.BOTTOM);
-      return false;
-    }
-    if (gst.text.trim().isEmpty) {
-      Get.snackbar("Required", "GST Number is required", snackPosition: SnackPosition.BOTTOM);
-      return false;
-    }
+    // if (address.text.trim().isEmpty) {
+    //   Get.snackbar("Required", "Address is required", snackPosition: SnackPosition.BOTTOM);
+    //   return false;
+    // }
+    // if (gst.text.trim().isEmpty) {
+    //   Get.snackbar("Required", "GST Number is required", snackPosition: SnackPosition.BOTTOM);
+    //   return false;
+    // }
     if (password.text.trim().length < 4) {
       Get.snackbar("Invalid", "Password too short", snackPosition: SnackPosition.BOTTOM);
       return false;

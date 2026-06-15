@@ -8,7 +8,13 @@
   import 'package:intl/intl.dart';
   import 'package:url_launcher/url_launcher.dart';
   import 'package:zlock_smart_finance/app/services/device_location_service.dart';
+import 'package:zlock_smart_finance/app/services/dio_client.dart';
+import 'package:zlock_smart_finance/app/services/key_details_service.dart';
   import 'package:zlock_smart_finance/app/services/retailer_api.dart';
+import 'package:zlock_smart_finance/app/services/update_emi_service.dart';
+import 'package:zlock_smart_finance/app/utils/change_emi_status_bottom.dart';
+import 'package:zlock_smart_finance/model/key_details_response.dart';
+import 'package:zlock_smart_finance/model/update_emi_response.dart';
   import 'package:zlock_smart_finance/modules/customer_listing/customer_details/customer_detail_v2_page.dart';
   import 'package:zlock_smart_finance/modules/customer_listing/customer_details/customer_detail_v2_response.dart';
   import 'package:zlock_smart_finance/modules/customer_listing/customer_details/customer_detail_v2_service.dart';
@@ -47,14 +53,15 @@
   }
 
   class CustomerDetailV2EmiRow {
-    final String emiId;
+    final int emiNumber;
+
     String date;
     String amount;
     CustomerDetailV2EmiStatus status;
     DateTime? paidDate;
 
     CustomerDetailV2EmiRow({
-      required this.emiId,
+      required this.emiNumber,
       required this.date,
       required this.amount,
       required this.status,
@@ -84,6 +91,9 @@
 
     final emis = <CustomerDetailV2EmiRow>[].obs;
 
+    final emiSchedule = RxList<EmiScheduleItem>();
+
+
     final _service = CustomerDetailV2Service();
     final _commandService = DeviceCommandService();
 
@@ -99,12 +109,24 @@
     }
 
 
+    // ✅ Details data
+    final details = Rxn<KeyDetailsData>();
+
+    final _detailsService = KeyDetailsService();
+
+    final _emiService = EmiService();
+    final isUpdatingEmi = false.obs; // optional loader
+
+
     RxDouble latitude = 0.0.obs;
     RxDouble longitude = 0.0.obs;
 
     RxString lastUpdatedText = "Updating...".obs;
     Timer? _locationTimer;
     DateTime? _lastFetchTime;
+
+    final RxList<Map<String, dynamic>> simHistory =
+        <Map<String, dynamic>>[].obs;
 
     @override
     void onInit() {
@@ -216,6 +238,8 @@
       try {
         final resp = await _service.getCustomerById(customerId: id);
         customer.value = resp;
+        await fetchEmiSchedule();
+
         /// ✅ SYNC COMMAND STATES FROM API
         commands["ACTIVE_RESTRICTION"]?.value =
             resp?.keyActions?.restriction ?? false;
@@ -311,28 +335,59 @@
 
     String _fmtMoney(num v) => _moneyFmt.format(v);
 
-    void _buildEmiRows() {
-      final emi = customer.value?.emi;
-      if (emi == null) {
-        emis.clear();
-        return;
-      }
+    // void _buildEmiRows() {
+    //   final emi = customer.value?.emi;
+    //   if (emi == null) {
+    //     emis.clear();
+    //     return;
+    //   }
+    //
+    //   final total = emi.tenureMonths ?? 0;
+    //   final paid = emi.totalEmiPaid ?? 0;
+    //   final list = <CustomerDetailV2EmiRow>[];
+    //
+    //   for (int i = 0; i < total; i++) {
+    //     final isPaid = i < paid;
+    //
+    //     list.add(
+    //       CustomerDetailV2EmiRow(
+    //         emiId: "${customer.value?.id ?? ''}_$i",
+    //         date: _fmtDate(emi.startDate),
+    //         amount: _fmtMoney(emi.emiAmount ?? 0),
+    //         status: isPaid
+    //             ? CustomerDetailV2EmiStatus.paid
+    //             : CustomerDetailV2EmiStatus.unpaid,
+    //       ),
+    //     );
+    //   }
+    //
+    //   emis.assignAll(list);
+    // }
 
-      final total = emi.tenureMonths ?? 0;
-      final paid = emi.totalEmiPaid ?? 0;
+    void _buildEmiRows() {
       final list = <CustomerDetailV2EmiRow>[];
 
-      for (int i = 0; i < total; i++) {
-        final isPaid = i < paid;
-
+      for (final emi in emiSchedule) {
         list.add(
           CustomerDetailV2EmiRow(
-            emiId: "${customer.value?.id ?? ''}_$i",
-            date: _fmtDate(emi.startDate),
-            amount: _fmtMoney(emi.emiAmount ?? 0),
-            status: isPaid
+            emiNumber: emi.emiNumber,
+            date: emi.dueDate == null
+                ? "-"
+                : _fmtDate(emi.dueDate),
+
+            amount: _fmtMoney(
+              emi.emiAmount,
+            ),
+
+            status: emi.status.toLowerCase() == "paid"
                 ? CustomerDetailV2EmiStatus.paid
                 : CustomerDetailV2EmiStatus.unpaid,
+
+            paidDate: emi.paidDate == null
+                ? null
+                : DateTime.tryParse(
+              emi.paidDate!,
+            ),
           ),
         );
       }
@@ -340,9 +395,124 @@
       emis.assignAll(list);
     }
 
+    // void openChangeStatusSheet(BuildContext context, int index) {
+    //   selectedStatus.value = emis[index].status;
+    //   selectedPayDate.value = emis[index].paidDate;
+    // }
     void openChangeStatusSheet(BuildContext context, int index) {
+      // prefill
       selectedStatus.value = emis[index].status;
       selectedPayDate.value = emis[index].paidDate;
+
+      showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
+        ),
+        builder: (_) => ChangeStatusSheet2(ctrl: this, index: index),
+      );
+    }
+
+
+    Future<void> fetchEmiSchedule() async {
+      try {
+        final id = customerId.value.trim();
+
+        final res = await ApiClient.dio.get(
+          RetailerAPI.getCustomerEmi(id),
+        );
+
+        final response =
+        EmiScheduleResponse.fromJson(res.data);
+
+        emiSchedule.assignAll(
+          response.data?.schedule ?? [],
+        );
+
+        _buildEmiRows();
+      } catch (e) {
+        debugPrint("❌ EMI FETCH ERROR => $e");
+      }
+    }
+
+    Future<void> updateEmiFromSheet(int index) async {
+      if (index < 0 || index >= emis.length) {
+        Get.snackbar(
+          "Error",
+          "Invalid EMI index",
+          snackPosition: SnackPosition.BOTTOM,
+        );
+        return;
+      }
+
+      final row = emis[index];
+
+      if (selectedStatus.value == CustomerDetailV2EmiStatus.paid &&
+          selectedPayDate.value == null) {
+        Get.snackbar(
+          "Error",
+          "Please choose EMI pay date",
+          snackPosition: SnackPosition.BOTTOM,
+        );
+        return;
+      }
+
+      if (isUpdatingEmi.value) return;
+      isUpdatingEmi.value = true;
+
+      try {
+        final body = <String, dynamic>{
+          "id": customerId.value.trim(), // customer id
+          "emi_number": row.emiNumber,
+          "status": selectedStatus.value ==
+              CustomerDetailV2EmiStatus.paid
+              ? "paid"
+              : "pending", // pending = unpaid
+
+          "paid_amount": row.amount
+              .replaceAll("₹", "")
+              .replaceAll(",", "")
+              .trim(),
+
+          "payment_mode": "cash",
+          "transaction_id": "",
+        };
+
+        debugPrint("✅ UPDATE EMI BODY => $body");
+
+        final resp = await _emiService.updateEmi(
+          body: body,
+        );
+
+        if (resp == null) {
+          Get.snackbar(
+            "Error",
+            resp?.message ?? "Failed to update EMI",
+            snackPosition: SnackPosition.BOTTOM,
+          );
+          return;
+        }
+
+        /// Refresh latest EMI schedule
+        await fetchEmiSchedule();
+
+        Get.snackbar(
+          "Success",
+          resp.message,
+          snackPosition: SnackPosition.BOTTOM,
+        );
+      } catch (e) {
+        debugPrint("❌ UPDATE EMI ERROR => $e");
+
+        Get.snackbar(
+          "Error",
+          "Failed to update EMI",
+          snackPosition: SnackPosition.BOTTOM,
+        );
+      } finally {
+        isUpdatingEmi.value = false;
+      }
     }
 
     Future<void> pickPayDate(BuildContext context) async {
@@ -1158,6 +1328,16 @@
 
         /// 🔥 FIXED KEY
         final simInfo = data["current_sim_info"] ?? {};
+        /// 🔥 STORE HISTORY
+        simHistory.assignAll(
+          List<Map<String, dynamic>>.from(
+            data["sim_history"] ?? [],
+          ),
+        );
+
+        debugPrint(
+          "📜 SIM HISTORY COUNT => ${simHistory.length}",
+        );
 
         debugPrint("📲 SIM INFO => $simInfo");
 
